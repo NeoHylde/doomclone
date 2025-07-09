@@ -12,6 +12,14 @@ void framebuffer_size_callback(GLFWwindow *window, int width, int height)
     glViewport(0, 0, width, height);
 }
 
+// Create mesh helper function
+Mesh createMesh(Vertex* vertices, size_t vCount, GLuint* indices, size_t iCount, Texture* textures, size_t tCount) {
+    std::vector <Vertex> verts(vertices, vertices + vCount/sizeof(Vertex));
+    std::vector <GLuint> ind(indices, indices + iCount/ sizeof(GLuint));
+    std::vector <Texture> tex(textures, textures + tCount / sizeof(Texture));
+    return Mesh(verts, ind, tex);
+}
+
 
 // Vertices coordinates
 Vertex verticesTile[] =
@@ -67,7 +75,8 @@ GLuint lightIndices[] =
 };
 
 int main()
-{
+{   
+    //Window Setup
     if (!glfwInit())
     {
         cout << "Failed to initialize GLFW" << endl;
@@ -97,23 +106,21 @@ int main()
     glViewport(0, 0, width, height);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
+    ////////////////////////////////////////////////////////////////////////////
+
     Texture texturesPlank[] {
         Texture("planks.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
         Texture("planksSpec.png", "specular", 1 , GL_RED, GL_UNSIGNED_BYTE),
     };
 
+    Mesh floorMesh = createMesh(verticesTile, sizeof(verticesTile), indices, sizeof(indices), texturesPlank, sizeof(texturesPlank));
+
     Texture texturesBrick[] {Texture("brick.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE)};
 
+    Mesh wallMesh = createMesh(verticesWall, sizeof(verticesWall), indices, sizeof(indices), texturesBrick, sizeof(texturesBrick));
+
     Shader shaderProgram("resources/shaders/default.vert", "resources/shaders/default.frag");
-
-    std::vector <Vertex> vertsTile(verticesTile, verticesTile + sizeof(verticesTile)/sizeof(Vertex));
-    std::vector <GLuint> ind(indices, indices + sizeof(indices)/ sizeof(GLuint));
-    std::vector <Texture> tex(texturesPlank, texturesPlank + sizeof(texturesPlank) / sizeof(Texture));
-    Mesh floorMesh(vertsTile, ind, tex);
-
-    std::vector <Vertex> vertsWall(verticesWall, verticesWall + sizeof(verticesTile)/sizeof(Vertex));
-    std::vector <Texture> texBrick(texturesBrick, texturesBrick + sizeof(texturesBrick) / sizeof(Texture));
-    Mesh wallMesh(vertsWall, ind, texBrick);
+    
 
     Wall wall(&wallMesh, glm::vec3(0.0f, 0.0f, -1.0f));
 
@@ -121,9 +128,7 @@ int main()
     map.generateGrid(2,2,&floorMesh);
 
     Shader lightShader("resources/shaders/light.vert", "resources/shaders/light.frag");
-    std::vector <Vertex> lightVerts(lightVertices, lightVertices + sizeof(lightVertices)/ sizeof(Vertex));
-    std::vector <GLuint> lightInd(lightIndices, lightIndices + sizeof(lightIndices) / sizeof(GLuint));   
-    Mesh light(lightVerts, lightInd, tex);
+    Mesh light = createMesh(lightVertices, sizeof(lightVertices), lightIndices, sizeof(lightIndices), texturesPlank, sizeof(texturesPlank));
 
     glm::vec4 lightColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 
@@ -157,7 +162,6 @@ int main()
         camera.Inputs(window);
 
         camera.updateMatrix(45.0f, 0.1f, 100.0f);
-
         
         light.Draw(lightShader, camera);
         map.Draw(camera, shaderProgram, shaderProgram);
