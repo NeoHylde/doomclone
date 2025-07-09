@@ -1,0 +1,40 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "cppbuild",
+      "label": "C/C++: g++.exe build active file",
+      "command": "C:/mingw64/bin/g++.exe",
+      "args": [
+        "-g",
+        "-std=c++17",
+        "-I${workspaceFolder}/include",
+        "-L${workspaceFolder}/lib",
+        "${workspaceFolder}/src/main.cpp",
+        "${workspaceFolder}/src/glad.c",
+        "${workspaceFolder}/src/EBO.cpp",
+        "${workspaceFolder}/src/VBO.cpp",
+        "${workspaceFolder}/src/VAO.cpp",
+        "${workspaceFolder}/src/shaderClass.cpp",
+        "${workspaceFolder}/src/stb.cpp",
+        "${workspaceFolder}/src/Texture.cpp",
+        "${workspaceFolder}/src/Camera.cpp",
+        "${workspaceFolder}/src/Mesh.cpp",
+        "${workspaceFolder}/src/Tile.cpp",
+        "-I${workspaceFolder}/headers",
+        "-lglfw3dll",
+        "-o",
+        "${workspaceFolder}/executable.exe"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": ["$gcc"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "detail": "compiler: C:/mingw64/bin/g++.exe"
+    }
+  ]
+}
