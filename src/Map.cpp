@@ -3,20 +3,13 @@
 Map::Map() {
 }
 
-void Map::generateGrid(int width, int depth, Mesh* floorMesh) {
-    for(float x = 0; x < width*2; x += 2) {
-        for(float y = 0; y < depth*2; y += 2) {
-            glm::vec3 pos(x, 0.0f,y);
-            tiles.emplace_back(floorMesh, pos);
-        }
-    }
+void Map::addCorridor(glm::vec3 pos, Mesh* floorMesh, Mesh* wallMesh) {
+    components.emplace_back(std::make_unique<Corridor>(pos, floorMesh, wallMesh));
 }
 
-void Map::Draw(Camera& camera, Shader& tileShader, Shader& wallShader)
+void Map::Draw(Camera& camera, Shader& shader)
 {
-    for (Tile& tile : tiles)
-        tile.Draw(camera, tileShader);
-
-    for (Wall& wall : walls)
-        wall.Draw(camera, wallShader);
+    for (const auto& component : components) {
+        component->Draw(camera, shader);
+    }
 }
