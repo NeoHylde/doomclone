@@ -3,23 +3,25 @@
 
 #include<vector>
 #include<glm/glm.hpp>
+#include<memory>
 
 #include"Tile.h"
 #include"Wall.h"
 #include"Mesh.h"
 #include"shaderClass.h"
 #include"Camera.h"
+#include"Corridor.h"
+#include"MapComponent.h"
 
 class Map {
 public:
-    std::vector<Tile> tiles;
-    std::vector<Wall> walls;
+    std::vector<std::unique_ptr<MapComponent>> components;
     
     Map();
 
-    void generateGrid(int width, int depth, Mesh* floorMesh);
+    void addCorridor(glm::vec3 pos, Mesh* floorMesh, Mesh* wallMesh);
 
-    void Draw(Camera& camera, Shader& tileShader, Shader& wallShader);
+    void Draw(Camera& camera, Shader& shader);
 };
 
 #endif
