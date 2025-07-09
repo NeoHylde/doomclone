@@ -145,10 +145,11 @@ int main()
 
     Shader shaderProgram("resources/shaders/default.vert", "resources/shaders/default.frag");
     
-    Wall wall(&wallMesh, glm::vec3(0.0f, 0.0f, -1.0f));
 
     Map map;
-    map.generateGrid(2,2,&floorMesh);
+
+    map.addCorridor(glm::vec3(0.0f, 0.0f, 0.0f), &floorMesh, &wallMesh);
+    map.addCorridor(glm::vec3(2.0f, 0.0f, 0.0f), &floorMesh, &wallMesh);
 
     Shader lightShader("resources/shaders/light.vert", "resources/shaders/light.frag");
     Mesh light = createLightMesh();
@@ -182,8 +183,7 @@ int main()
         camera.updateMatrix(45.0f, 0.1f, 100.0f);
         
         light.Draw(lightShader, camera);
-        map.Draw(camera, shaderProgram, shaderProgram);
-        wall.Draw(camera, shaderProgram);
+        map.Draw(camera, shaderProgram);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
