@@ -142,7 +142,7 @@ int main()
 
     Mesh floorMesh = createFloorMesh();
     Mesh wallMesh = createWallMesh();
-    
+
     Shader shaderProgram("resources/shaders/default.vert", "resources/shaders/default.frag");
     
     Wall wall(&wallMesh, glm::vec3(0.0f, 0.0f, -1.0f));
@@ -163,13 +163,12 @@ int main()
     glUniform4f(glGetUniformLocation(shaderProgram.ID, "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
     glUniform3f(glGetUniformLocation(shaderProgram.ID, "lightPos"), lightPos.x, lightPos.y, lightPos.z);
 
-
-    
-
     // Enable depth buffer
     glEnable(GL_DEPTH_TEST);
 
     Camera camera(width, height, glm::vec3(0.0f, 0.0f, 2.0f));
+
+    // Main loop
 
     while (!glfwWindowShouldClose(window))
     {
