@@ -12,15 +12,6 @@ void framebuffer_size_callback(GLFWwindow *window, int width, int height)
     glViewport(0, 0, width, height);
 }
 
-// Create mesh helper function
-Mesh createMesh(Vertex* vertices, size_t vCount, GLuint* indices, size_t iCount, Texture* textures, size_t tCount) {
-    std::vector <Vertex> verts(vertices, vertices + vCount/sizeof(Vertex));
-    std::vector <GLuint> ind(indices, indices + iCount/ sizeof(GLuint));
-    std::vector <Texture> tex(textures, textures + tCount / sizeof(Texture));
-    return Mesh(verts, ind, tex);
-}
-
-
 // Vertices coordinates
 Vertex verticesTile[] =
 { //               COORDINATES           /            COLORS          /           NORMALS         /       TEXTURE COORDINATES    //
@@ -74,9 +65,50 @@ GLuint lightIndices[] =
 	4, 6, 7
 };
 
+
+// Create mesh helper function
+Mesh createMesh(Vertex* vertices, size_t vCount, GLuint* indices, size_t iCount, Texture* textures, size_t tCount) {
+    std::vector <Vertex> verts(vertices, vertices + vCount/sizeof(Vertex));
+    std::vector <GLuint> ind(indices, indices + iCount/ sizeof(GLuint));
+    std::vector <Texture> tex(textures, textures + tCount / sizeof(Texture));
+    return Mesh(verts, ind, tex);
+}
+
+Mesh createFloorMesh() {
+    Texture texturesPlank[] {
+        Texture("planks.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
+        Texture("planksSpec.png", "specular", 1 , GL_RED, GL_UNSIGNED_BYTE),
+    };
+
+    return createMesh(verticesTile, sizeof(verticesTile), indices, sizeof(indices), texturesPlank, sizeof(texturesPlank));
+}
+
+Mesh createLightMesh() {
+    Texture texturesPlank[] {
+        Texture("planks.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
+        Texture("planksSpec.png", "specular", 1 , GL_RED, GL_UNSIGNED_BYTE),
+    };
+
+    return createMesh(lightVertices, sizeof(lightVertices), lightIndices, sizeof(lightIndices), texturesPlank, sizeof(texturesPlank));
+}
+
+Mesh createWallMesh() {
+    Texture texturesBrick[] {Texture("brick.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE)};
+
+    return createMesh(verticesWall, sizeof(verticesWall), indices, sizeof(indices), texturesBrick, sizeof(texturesBrick));
+}
+
+void setUpLight(Shader& lightShader, glm::vec3 lightPos, glm::mat4 lightModel, glm::vec4 lightColor) {
+    lightModel = glm::translate(lightModel, lightPos);
+
+    lightShader.Activate();
+    glUniformMatrix4fv(glGetUniformLocation(lightShader.ID, "model"), 1, GL_FALSE, glm::value_ptr(lightModel));
+    glUniform4f(glGetUniformLocation(lightShader.ID, "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
+}
+
 int main()
 {   
-    //Window Setup
+    //--- Window Setup ---
     if (!glfwInit())
     {
         cout << "Failed to initialize GLFW" << endl;
@@ -106,40 +138,27 @@ int main()
     glViewport(0, 0, width, height);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-    ////////////////////////////////////////////////////////////////////////////
+    // Scene Setup
 
-    Texture texturesPlank[] {
-        Texture("planks.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
-        Texture("planksSpec.png", "specular", 1 , GL_RED, GL_UNSIGNED_BYTE),
-    };
-
-    Mesh floorMesh = createMesh(verticesTile, sizeof(verticesTile), indices, sizeof(indices), texturesPlank, sizeof(texturesPlank));
-
-    Texture texturesBrick[] {Texture("brick.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE)};
-
-    Mesh wallMesh = createMesh(verticesWall, sizeof(verticesWall), indices, sizeof(indices), texturesBrick, sizeof(texturesBrick));
-
+    Mesh floorMesh = createFloorMesh();
+    Mesh wallMesh = createWallMesh();
+    
     Shader shaderProgram("resources/shaders/default.vert", "resources/shaders/default.frag");
     
-
     Wall wall(&wallMesh, glm::vec3(0.0f, 0.0f, -1.0f));
 
     Map map;
     map.generateGrid(2,2,&floorMesh);
 
     Shader lightShader("resources/shaders/light.vert", "resources/shaders/light.frag");
-    Mesh light = createMesh(lightVertices, sizeof(lightVertices), lightIndices, sizeof(lightIndices), texturesPlank, sizeof(texturesPlank));
+    Mesh light = createLightMesh();
 
     glm::vec4 lightColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 
     glm::vec3 lightPos = glm::vec3(0.5f, 0.5f, 0.5f);
     glm::mat4 lightModel = glm::mat4(1.0f);
-    lightModel = glm::translate(lightModel, lightPos);
-
-
-    lightShader.Activate();
-    glUniformMatrix4fv(glGetUniformLocation(lightShader.ID, "model"), 1, GL_FALSE, glm::value_ptr(lightModel));
-    glUniform4f(glGetUniformLocation(lightShader.ID, "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
+    setUpLight(lightShader, lightPos, lightModel, lightColor);
+    
     shaderProgram.Activate();
     glUniform4f(glGetUniformLocation(shaderProgram.ID, "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
     glUniform3f(glGetUniformLocation(shaderProgram.ID, "lightPos"), lightPos.x, lightPos.y, lightPos.z);
