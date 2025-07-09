@@ -1,4 +1,6 @@
 #include "../headers/Tile.h"
+#include "../headers/Wall.h"
+#include "../headers/Map.h"
 
 const unsigned int width = 800;
 const unsigned int height = 800;
@@ -12,12 +14,21 @@ void framebuffer_size_callback(GLFWwindow *window, int width, int height)
 
 
 // Vertices coordinates
-Vertex vertices[] =
+Vertex verticesTile[] =
 { //               COORDINATES           /            COLORS          /           NORMALS         /       TEXTURE COORDINATES    //
 	Vertex{glm::vec3(-1.0f, 0.0f,  1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 0.0f)},
 	Vertex{glm::vec3(-1.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 1.0f)},
 	Vertex{glm::vec3( 1.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 1.0f)},
 	Vertex{glm::vec3( 1.0f, 0.0f,  1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 0.0f)}
+};
+
+// Vertices coordinates
+Vertex verticesWall[] =
+{ //               COORDINATES           /            COLORS          /           NORMALS         /       TEXTURE COORDINATES    //
+	Vertex{glm::vec3(-1.0f, 0.0f,  0.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 0.0f)},
+	Vertex{glm::vec3(-1.0f, 2.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 1.0f)},
+	Vertex{glm::vec3( 1.0f, 2.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 1.0f)},
+	Vertex{glm::vec3( 1.0f, 0.0f,  0.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 0.0f)}
 };
 
 // Indices for vertices order
@@ -86,22 +97,28 @@ int main()
     glViewport(0, 0, width, height);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-    Texture textures[] {
+    Texture texturesPlank[] {
         Texture("planks.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
-        Texture("planksSpec.png", "specular", 1 , GL_RED, GL_UNSIGNED_BYTE)
+        Texture("planksSpec.png", "specular", 1 , GL_RED, GL_UNSIGNED_BYTE),
     };
+
+    Texture texturesBrick[] {Texture("brick.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE)};
 
     Shader shaderProgram("resources/shaders/default.vert", "resources/shaders/default.frag");
 
-    std::vector <Vertex> verts(vertices, vertices + sizeof(vertices)/sizeof(Vertex));
+    std::vector <Vertex> vertsTile(verticesTile, verticesTile + sizeof(verticesTile)/sizeof(Vertex));
     std::vector <GLuint> ind(indices, indices + sizeof(indices)/ sizeof(GLuint));
-    std::vector <Texture> tex(textures, textures + sizeof(textures) / sizeof(Texture));
-    Mesh floorMesh(verts, ind, tex);
+    std::vector <Texture> tex(texturesPlank, texturesPlank + sizeof(texturesPlank) / sizeof(Texture));
+    Mesh floorMesh(vertsTile, ind, tex);
 
-    std::vector<Tile> tiles;
-    tiles.emplace_back(&floorMesh, glm::vec3(0.0f, 0.0f, 0.0f));
-    tiles.emplace_back(&floorMesh, glm::vec3(1.0f, 0.0f, 0.0f));
-    tiles.emplace_back(&floorMesh, glm::vec3(2.0f, 0.0f, 0.0f));
+    std::vector <Vertex> vertsWall(verticesWall, verticesWall + sizeof(verticesTile)/sizeof(Vertex));
+    std::vector <Texture> texBrick(texturesBrick, texturesBrick + sizeof(texturesBrick) / sizeof(Texture));
+    Mesh wallMesh(vertsWall, ind, texBrick);
+
+    Wall wall(&wallMesh, glm::vec3(0.0f, 0.0f, -1.0f));
+
+    Map map;
+    map.generateGrid(2,2,&floorMesh);
 
     Shader lightShader("resources/shaders/light.vert", "resources/shaders/light.frag");
     std::vector <Vertex> lightVerts(lightVertices, lightVertices + sizeof(lightVertices)/ sizeof(Vertex));
@@ -114,15 +131,11 @@ int main()
     glm::mat4 lightModel = glm::mat4(1.0f);
     lightModel = glm::translate(lightModel, lightPos);
 
-    glm::vec3 pyramidPos = glm::vec3(0.0f, 0.0f, 0.0f);
-    glm::mat4 pyramidModel = glm::mat4(1.0f);
-    pyramidModel = glm::translate(pyramidModel, pyramidPos);
 
     lightShader.Activate();
     glUniformMatrix4fv(glGetUniformLocation(lightShader.ID, "model"), 1, GL_FALSE, glm::value_ptr(lightModel));
     glUniform4f(glGetUniformLocation(lightShader.ID, "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
     shaderProgram.Activate();
-    glUniformMatrix4fv(glGetUniformLocation(shaderProgram.ID, "model"), 1, GL_FALSE, glm::value_ptr(pyramidModel));
     glUniform4f(glGetUniformLocation(shaderProgram.ID, "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
     glUniform3f(glGetUniformLocation(shaderProgram.ID, "lightPos"), lightPos.x, lightPos.y, lightPos.z);
 
@@ -147,9 +160,8 @@ int main()
 
         
         light.Draw(lightShader, camera);
-        for (Tile& tile : tiles) {
-            tile.Draw(camera, shaderProgram);
-        }
+        map.Draw(camera, shaderProgram, shaderProgram);
+        wall.Draw(camera, shaderProgram);
 
         glfwSwapBuffers(window);
         glfwPollEvents();

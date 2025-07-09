@@ -21,6 +21,8 @@
         "${workspaceFolder}/src/Camera.cpp",
         "${workspaceFolder}/src/Mesh.cpp",
         "${workspaceFolder}/src/Tile.cpp",
+        "${workspaceFolder}/src/Wall.cpp",
+        "${workspaceFolder}/src/Map.cpp",
         "-I${workspaceFolder}/headers",
         "-lglfw3dll",
         "-o",
