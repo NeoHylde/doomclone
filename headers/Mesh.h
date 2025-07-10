@@ -5,7 +5,7 @@
 
 #include"VAO.h"
 #include"EBO.h"
-#include"Camera.h"
+#include"Entity.h"
 #include"Texture.h"
 
 class Mesh {
@@ -18,7 +18,7 @@ public:
 
     Mesh(std::vector<Vertex>& vertices, std::vector <GLuint>& indices, std::vector <Texture>& textures);
 
-    void Draw(Shader& shader, Camera& camera);
+    void Draw(Shader& shader, Entity& camera);
 };
 
 #endif

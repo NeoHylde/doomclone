@@ -7,8 +7,8 @@ Wall::Wall(Mesh* mesh, glm::vec3 pos) {
     modelMatrix = glm::translate(modelMatrix, position);
 }
 
-void Wall::Draw(Camera& camera, Shader& shader) {
+void Wall::Draw(Entity& entity, Shader& shader) {
     shader.Activate();
     glUniformMatrix4fv(glGetUniformLocation(shader.ID, "model"), 1, GL_FALSE, glm::value_ptr(modelMatrix));
-    mesh->Draw(shader, camera);
+    mesh->Draw(shader, entity);
 }

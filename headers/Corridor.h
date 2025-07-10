@@ -7,6 +7,7 @@
 #include"Mesh.h"
 #include"Camera.h"
 #include"MapComponent.h"
+#include "Entity.h"
 
 #include<vector>
 #include<glm/glm.hpp>
@@ -19,7 +20,7 @@ public:
     glm::vec3 position;
 
     Corridor(glm::vec3 position, Mesh* tileMesh, Mesh* wallMesh);
-    void Draw(Camera& camera, Shader& shader) override;
+    void Draw(Entity& entity, Shader& shader) override;
 };
 
 

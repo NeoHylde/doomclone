@@ -6,8 +6,8 @@ Corridor::Corridor(glm::vec3 position, Mesh* tileMesh, Mesh* wallMesh) : tile(ti
 
 }
 
-void Corridor::Draw(Camera& camera, Shader& shader) {
-    tile.Draw(camera, shader);
-    walls[0].Draw(camera, shader);
-    walls[1].Draw(camera, shader);
+void Corridor::Draw(Entity& entity, Shader& shader) {
+    tile.Draw(entity, shader);
+    walls[0].Draw(entity, shader);
+    walls[1].Draw(entity, shader);
 }

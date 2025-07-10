@@ -4,6 +4,7 @@
 #include<glm/glm.hpp>
 #include"Camera.h"
 #include"Mesh.h"
+#include "Entity.h"
 
 class Wall {
 public:
@@ -12,7 +13,7 @@ public:
     glm::mat4 modelMatrix;
 
     Wall(Mesh* mesh, glm::vec3 position);
-    void Draw(Camera& camera, Shader& shader);
+    void Draw(Entity& entity, Shader& shader);
 };
 
 #endif
