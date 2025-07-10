@@ -4,6 +4,7 @@
 #include<vector>
 #include<glm/glm.hpp>
 #include<memory>
+#include<iostream>
 
 #include"Tile.h"
 #include"Wall.h"
@@ -16,12 +17,17 @@
 class Map {
 public:
     std::vector<std::unique_ptr<MapComponent>> components;
+    std::vector<Tile> tiles;
     
     Map();
 
     void addCorridor(glm::vec3 pos, Mesh* floorMesh, Mesh* wallMesh);
 
-    void Draw(Camera& camera, Shader& shader);
+    void generateGrid(int size,  Mesh* floorMesh);
+
+    bool isPositionWalkable(glm::vec3 pos);
+
+    void Draw(Entity& entity, Shader& shader);
 };
 
 #endif
