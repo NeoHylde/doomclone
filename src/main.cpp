@@ -1,6 +1,7 @@
 #include "../headers/Tile.h"
 #include "../headers/Wall.h"
 #include "../headers/Map.h"
+#include "../headers/Player.h"
 
 const unsigned int width = 800;
 const unsigned int height = 800;
@@ -148,8 +149,9 @@ int main()
 
     Map map;
 
-    map.addCorridor(glm::vec3(0.0f, 0.0f, 0.0f), &floorMesh, &wallMesh);
-    map.addCorridor(glm::vec3(2.0f, 0.0f, 0.0f), &floorMesh, &wallMesh);
+    //map.addCorridor(glm::vec3(0.0f, 0.0f, 0.0f), &floorMesh, &wallMesh);
+    //map.addCorridor(glm::vec3(2.0f, 0.0f, 0.0f), &floorMesh, &wallMesh);
+    map.generateGrid(4, &floorMesh);
 
     Shader lightShader("resources/shaders/light.vert", "resources/shaders/light.frag");
     Mesh light = createLightMesh();
@@ -167,7 +169,8 @@ int main()
     // Enable depth buffer
     glEnable(GL_DEPTH_TEST);
 
-    Camera camera(width, height, glm::vec3(0.0f, 0.0f, 2.0f));
+    //Camera camera(width, height, glm::vec3(0.0f, 0.0f, 2.0f));
+    Player camera(width, height, glm::vec3(4.0f, 2.0f, 2.0f));
 
     // Main loop
 
@@ -178,7 +181,13 @@ int main()
         // Clean the back buffer and depth buffer
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        camera.Inputs(window);
+        glm::vec3 pos = camera.Position;
+        std::string printable = std::to_string(pos.x) + ", " +  std::to_string(pos.z);
+
+        glfwSetWindowTitle(window, printable.c_str());
+
+        // 4. Handle player input
+        camera.Inputs(window, &map);
 
         camera.updateMatrix(45.0f, 0.1f, 100.0f);
         
