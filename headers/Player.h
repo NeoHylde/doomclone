@@ -18,6 +18,7 @@ public:
     glm::mat4 playerMatrix = glm::mat4(1.0f);
 
     bool escaped = false;
+    bool escapePressedLastFrame = false;
 
     int width;
     int height;

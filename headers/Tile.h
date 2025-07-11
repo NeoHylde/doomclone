@@ -11,17 +11,23 @@
 
 class Tile{
 private:
+    glm::vec3 translations;
+    glm::quat rotation;
+    glm::vec3 scale;
     glm::vec3 position;
     Mesh* mesh;
     glm::mat4 modelMatrix;
     bool isWalkable = false;
     float size = 2.0f;
 public:
+    Tile(Mesh* mesh, 
+        glm::vec3 position, 
+        glm::vec3 translations,
+        glm::quat rotation,
+        glm::vec3 scale);
     
     bool contains(glm::vec3 pos);
-
-    Tile(Mesh* mesh, glm::vec3 position);
-
+    
     bool getWalkable();
 
     glm::vec3 getPosition();

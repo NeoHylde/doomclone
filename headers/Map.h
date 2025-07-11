@@ -11,7 +11,6 @@
 #include"Mesh.h"
 #include"shaderClass.h"
 #include"Camera.h"
-#include"Corridor.h"
 #include"MapComponent.h"
 
 class Map {
@@ -20,8 +19,6 @@ public:
     std::vector<Tile> tiles;
     
     Map();
-
-    void addCorridor(glm::vec3 pos, Mesh* floorMesh, Mesh* wallMesh);
 
     void generateGrid(int size,  Mesh* floorMesh);
 

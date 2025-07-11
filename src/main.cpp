@@ -2,6 +2,7 @@
 #include "../headers/Wall.h"
 #include "../headers/Map.h"
 #include "../headers/Player.h"
+#include "../headers/MeshFactory.h"
 
 const unsigned int width = 800;
 const unsigned int height = 800;
@@ -11,92 +12,6 @@ using namespace std;
 void framebuffer_size_callback(GLFWwindow *window, int width, int height)
 {
     glViewport(0, 0, width, height);
-}
-
-// Vertices coordinates
-Vertex verticesTile[] =
-{ //               COORDINATES           /            COLORS          /           NORMALS         /       TEXTURE COORDINATES    //
-	Vertex{glm::vec3(-1.0f, 0.0f,  1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 0.0f)},
-	Vertex{glm::vec3(-1.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 1.0f)},
-	Vertex{glm::vec3( 1.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 1.0f)},
-	Vertex{glm::vec3( 1.0f, 0.0f,  1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 0.0f)}
-};
-
-// Vertices coordinates
-Vertex verticesWall[] =
-{ //               COORDINATES           /            COLORS          /           NORMALS         /       TEXTURE COORDINATES    //
-	Vertex{glm::vec3(-1.0f, 0.0f,  0.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 0.0f)},
-	Vertex{glm::vec3(-1.0f, 2.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 1.0f)},
-	Vertex{glm::vec3( 1.0f, 2.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 1.0f)},
-	Vertex{glm::vec3( 1.0f, 0.0f,  0.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 0.0f)}
-};
-
-// Indices for vertices order
-GLuint indices[] =
-{
-	0, 1, 2,
-	0, 2, 3
-};
-
-Vertex lightVertices[] =
-{ //     COORDINATES     //
-	Vertex{glm::vec3(-0.1f, -0.1f,  0.1f)},
-	Vertex{glm::vec3(-0.1f, -0.1f, -0.1f)},
-	Vertex{glm::vec3(0.1f, -0.1f, -0.1f)},
-	Vertex{glm::vec3(0.1f, -0.1f,  0.1f)},
-	Vertex{glm::vec3(-0.1f,  0.1f,  0.1f)},
-	Vertex{glm::vec3(-0.1f,  0.1f, -0.1f)},
-	Vertex{glm::vec3(0.1f,  0.1f, -0.1f)},
-	Vertex{glm::vec3(0.1f,  0.1f,  0.1f)}
-};
-
-GLuint lightIndices[] =
-{
-	0, 1, 2,
-	0, 2, 3,
-	0, 4, 7,
-	0, 7, 3,
-	3, 7, 6,
-	3, 6, 2,
-	2, 6, 5,
-	2, 5, 1,
-	1, 5, 4,
-	1, 4, 0,
-	4, 5, 6,
-	4, 6, 7
-};
-
-
-// Create mesh helper function
-Mesh createMesh(Vertex* vertices, size_t vCount, GLuint* indices, size_t iCount, Texture* textures, size_t tCount) {
-    std::vector <Vertex> verts(vertices, vertices + vCount/sizeof(Vertex));
-    std::vector <GLuint> ind(indices, indices + iCount/ sizeof(GLuint));
-    std::vector <Texture> tex(textures, textures + tCount / sizeof(Texture));
-    return Mesh(verts, ind, tex);
-}
-
-Mesh createFloorMesh() {
-    Texture texturesPlank[] {
-        Texture("planks.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
-        Texture("planksSpec.png", "specular", 1 , GL_RED, GL_UNSIGNED_BYTE),
-    };
-
-    return createMesh(verticesTile, sizeof(verticesTile), indices, sizeof(indices), texturesPlank, sizeof(texturesPlank));
-}
-
-Mesh createLightMesh() {
-    Texture texturesPlank[] {
-        Texture("planks.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
-        Texture("planksSpec.png", "specular", 1 , GL_RED, GL_UNSIGNED_BYTE),
-    };
-
-    return createMesh(lightVertices, sizeof(lightVertices), lightIndices, sizeof(lightIndices), texturesPlank, sizeof(texturesPlank));
-}
-
-Mesh createWallMesh() {
-    Texture texturesBrick[] {Texture("brick.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE)};
-
-    return createMesh(verticesWall, sizeof(verticesWall), indices, sizeof(indices), texturesBrick, sizeof(texturesBrick));
 }
 
 void setUpLight(Shader& lightShader, glm::vec3 lightPos, glm::mat4 lightModel, glm::vec4 lightColor) {
@@ -140,9 +55,9 @@ int main()
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     // Scene Setup
-
-    Mesh floorMesh = createFloorMesh();
-    Mesh wallMesh = createWallMesh();
+    MeshFactory mf;
+    Mesh* floorMesh = mf.createFloorMesh();
+    Mesh* light = mf.createLightMesh();
 
     Shader shaderProgram("resources/shaders/default.vert", "resources/shaders/default.frag");
     
@@ -151,10 +66,10 @@ int main()
 
     //map.addCorridor(glm::vec3(0.0f, 0.0f, 0.0f), &floorMesh, &wallMesh);
     //map.addCorridor(glm::vec3(2.0f, 0.0f, 0.0f), &floorMesh, &wallMesh);
-    map.generateGrid(4, &floorMesh);
+    map.generateGrid(8, floorMesh);
 
     Shader lightShader("resources/shaders/light.vert", "resources/shaders/light.frag");
-    Mesh light = createLightMesh();
+    //Mesh light = createLightMesh();
 
     glm::vec4 lightColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 
@@ -173,6 +88,8 @@ int main()
     Player camera(width, height, glm::vec3(4.0f, 2.0f, 2.0f));
 
     // Main loop
+    double previousTime = glfwGetTime();
+    int frameCount = 0;
 
     while (!glfwWindowShouldClose(window))
     {
@@ -181,23 +98,43 @@ int main()
         // Clean the back buffer and depth buffer
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        glm::vec3 pos = camera.Position;
-        std::string printable = std::to_string(pos.x) + ", " +  std::to_string(pos.z);
+        // Get current time
+        double currentTime = glfwGetTime();
+        frameCount++;
 
-        glfwSetWindowTitle(window, printable.c_str());
+        // If one second has passed, calculate and show FPS
+        
+        if (currentTime - previousTime >= 1.0) {
+            std::string printable = 
+                std::to_string(camera.Position.x) + ", " +
+                std::to_string(camera.Position.z) + 
+                " FPS: " + std::to_string(frameCount);
+            glfwSetWindowTitle(window, printable.c_str());
+
+            // Reset counter and time
+            frameCount = 0;
+            previousTime = currentTime;
+        }
 
         // 4. Handle player input
         camera.Inputs(window, &map);
-
-        camera.updateMatrix(45.0f, 0.1f, 100.0f);
-        
-        light.Draw(lightShader, camera);
+        camera.updateMatrix(90.0f, 0.1f, 100.0f);
+        light->Draw(
+            lightShader,
+            camera,
+            glm::mat4(1.0f),               // model matrix
+            lightPos,                      // translation
+            glm::quat(1.0f, 0.0f, 0.0f, 0.0f), // identity rotation
+            glm::vec3(1.0f)                // uniform scale
+        );
         map.Draw(camera, shaderProgram);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
 
+    delete light;
+    delete floorMesh;
     shaderProgram.Delete();
     lightShader.Delete();
 

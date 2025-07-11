@@ -55,17 +55,17 @@ void Player::Inputs(GLFWwindow *window, Map* map)
     {
         speed = 0.1f;
     }
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    
+    bool escapePressedThisFrame = glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS;
+
+    if (escapePressedThisFrame && !escapePressedLastFrame)
     {
-        if(!escaped) {
-            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-            escaped = true;
-        } else {
-            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
-            escaped = false;
-        }
-        
+        escaped = !escaped;
+        glfwSetInputMode(window, GLFW_CURSOR, escaped ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
     }
+
+    escapePressedLastFrame = escapePressedThisFrame;
+
 
     if (!escaped)
     {
