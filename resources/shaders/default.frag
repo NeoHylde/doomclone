@@ -14,7 +14,7 @@ in vec2 texCoord;
 
 //Gets the Texture Unit from the main function
 uniform sampler2D diffuse0;
-
+uniform bool useSpecularMap;
 uniform sampler2D specular0;
 
 uniform vec4 lightColor;
