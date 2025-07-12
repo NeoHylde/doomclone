@@ -29,12 +29,15 @@ private:
     std::vector<glm::vec3> scalesMeshes;
     std::vector<glm::mat4> matricesMeshes;
 
+    std::vector<glm::vec4> materials;
+
     std::vector<unsigned char> getData();
     std::vector<float> getFloats(json accessor);
     std::vector<GLuint> getIndices(json accessor);
     std::vector<Texture> getTextures();
+    std::vector<glm::vec4> getMaterials();
 
-    std::vector<Vertex> assembleVectices(
+    std::vector<Vertex> assembleVertices(
         std::vector<glm::vec3> positions, 
         std::vector<glm::vec3> normals,
         std::vector<glm::vec2> texUVs
