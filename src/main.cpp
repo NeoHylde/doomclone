@@ -3,6 +3,7 @@
 #include "../headers/Map.h"
 #include "../headers/Player.h"
 #include "../headers/MeshFactory.h"
+#include "../headers/Model.h"
 
 const unsigned int width = 800;
 const unsigned int height = 800;
@@ -55,24 +56,17 @@ int main()
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     // Scene Setup
+    Shader shaderProgram("resources/shaders/default.vert", "resources/shaders/default.frag");
+    Shader lightShader("resources/shaders/light.vert", "resources/shaders/light.frag");
+
     MeshFactory mf;
     Mesh* floorMesh = mf.createFloorMesh();
     Mesh* light = mf.createLightMesh();
 
-    Shader shaderProgram("resources/shaders/default.vert", "resources/shaders/default.frag");
-    
-
     Map map;
-
-    //map.addCorridor(glm::vec3(0.0f, 0.0f, 0.0f), &floorMesh, &wallMesh);
-    //map.addCorridor(glm::vec3(2.0f, 0.0f, 0.0f), &floorMesh, &wallMesh);
     map.generateGrid(8, floorMesh);
 
-    Shader lightShader("resources/shaders/light.vert", "resources/shaders/light.frag");
-    //Mesh light = createLightMesh();
-
     glm::vec4 lightColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-
     glm::vec3 lightPos = glm::vec3(0.5f, 0.5f, 0.5f);
     glm::mat4 lightModel = glm::mat4(1.0f);
     setUpLight(lightShader, lightPos, lightModel, lightColor);
@@ -84,11 +78,12 @@ int main()
     // Enable depth buffer
     glEnable(GL_DEPTH_TEST);
 
-    //Camera camera(width, height, glm::vec3(0.0f, 0.0f, 2.0f));
-    Player camera(width, height, glm::vec3(4.0f, 2.0f, 2.0f));
+    Camera camera(width, height, glm::vec3(0.0f, 0.0f, 2.0f));
+    //Player camera(width, height, glm::vec3(4.0f, 2.0f, 2.0f));
+    Model model("resources/mac10/scene.gltf");
 
     // Main loop
-    double previousTime = glfwGetTime();
+    double previousTime = glfwGetTime(); 
     int frameCount = 0;
 
     while (!glfwWindowShouldClose(window))
@@ -116,18 +111,19 @@ int main()
             previousTime = currentTime;
         }
 
-        // 4. Handle player input
-        camera.Inputs(window, &map);
+        // 4. Handle player input &map
+        camera.Inputs(window);
         camera.updateMatrix(90.0f, 0.1f, 100.0f);
-        light->Draw(
+        /** light->Draw(
             lightShader,
             camera,
             glm::mat4(1.0f),               // model matrix
             lightPos,                      // translation
             glm::quat(1.0f, 0.0f, 0.0f, 0.0f), // identity rotation
             glm::vec3(1.0f)                // uniform scale
-        );
-        map.Draw(camera, shaderProgram);
+        );*/
+        //map.Draw(camera, shaderProgram);
+        model.Draw(shaderProgram, camera);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
