@@ -58,7 +58,9 @@ vec4 direcLight() {
 
     float specular = specAmount * specularLight;
 
-    return (texture(diffuse0, texCoord) * lightColor * (diffuse + ambient) + texture(specular0, texCoord).r * specular) * lightColor;
+    vec4 baseColor = texture(diffuse0, texCoord) * vec4(color, 1.0);
+    return baseColor * lightColor * (diffuse + ambient) + vec4(1.0) * specular;
+
 }
 
 vec4 spotLight() {
