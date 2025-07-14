@@ -80,7 +80,7 @@ int main()
 
     Camera camera(width, height, glm::vec3(0.0f, 0.0f, 2.0f));
     //Player camera(width, height, glm::vec3(4.0f, 2.0f, 2.0f));
-    Model model("resources/mac10/scene.gltf");
+    Model model("resources/skeleton/scene.gltf");
 
     // Main loop
     double previousTime = glfwGetTime(); 
