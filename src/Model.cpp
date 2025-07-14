@@ -20,7 +20,7 @@ void Model::Draw(Shader& shader, Entity& entity) {
             matricesMeshes[i],
             translationsMeshes[i],
             rotationsMeshes[i]*glm::quat(glm::angleAxis(glm::radians(90.0f), glm::vec3(0, 1, 0))),
-            scalesMeshes[i]*5.0f);
+            scalesMeshes[i]);
     }
 }
 
@@ -278,6 +278,7 @@ std::vector<Texture> Model::getTextures()
 
 	std::string fileStr = std::string(file);
 	std::string fileDirectory = fileStr.substr(0, fileStr.find_last_of('/') + 1);
+	std::cout << fileDirectory << std::endl;
 
 	// Go over all images
 	for (unsigned int i = 0; i < JSON["images"].size(); i++)
