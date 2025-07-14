@@ -26,8 +26,8 @@
 ## Controls (For Player Class)
 
 - `W` / `A` / `S` / `D` – Move
-- Mouse – Look around
-- `ESC` – Unlock/Lock cursor
+- Mouse - Look around
+- `ESC` - Unlock/Lock cursor
 
 ---
 
