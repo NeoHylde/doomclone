@@ -1,30 +1,34 @@
-#ifndef ASTAR_CLASS_H
-#define ASTAR_CLASS_H
+#ifndef A_STAR_CLASS_H
+#define A_STAR_CLASS_H
 
-#include <glm/glm.hpp>
-#include <vector>
-#include <unordered_set>
-#include <unordered_map>
-#include "Graph.h"
+#include"Graph.h"
+#include<vector>
+#include<unordered_set>
+#include<queue>
 
 class AStar {
 public:
+    AStar(Graph* graph);
 
-    Graph graph;
+    std::vector<Node> backTrackPath(Node* node);
 
-    AStar(Graph& g);
+    bool inVisited(Node* node);
 
-    std::vector<Node> getPath(glm::vec3 start, glm::vec3 end);
+    float heuristic(const Node* a, const Node* b);
 
-    int heuristic(Node& a, Node& b);
+    std::vector<Node> getPath(Node* start, Node* end);    
 private:
-    Node toGridNode(const glm::vec3& pos) const;
-    glm::vec3 toWorldPos(const Node& node) const;
-    Node* getLowestFNode(std::vector<Node*>& openSet);
-    std::vector<Node> reconstructPath(Node* node);
+    Graph* graph;
 
-    bool isInClosedSet(const Node& node, const std::unordered_set<Node>& closedSet) const;
-    Node* getNodeFromOpenSet(const Node& node, std::vector<Node*>& openSet) const;
+    std::unordered_set<Node, NodePtrHasher> visited;
+
+    struct CompareNode {
+        bool operator()(const Node* a, const Node* b) const {
+            return a->getF() > b->getF();
+        }
+    };
+
+    std::priority_queue<Node*, std::vector<Node*>, CompareNode> frontier;
 };
 
 #endif

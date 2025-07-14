@@ -1,25 +1,18 @@
 #ifndef GRAPH_CLASS_H
 #define GRAPH_CLASS_H
 
-#include"Node.h"
-#include <vector>
+#include "Node.h"
+#include<unordered_map>
+#include<vector>
+#include"Map.h"
 
 class Graph {
 public:
-    Graph(int width, int height);
+    Graph(Map& map);
 
-    bool isBlocked(int x, int y) const;
-    void setBlocked(int x, int y, bool blocked);
-
-    std::vector<Node> getNeighbors(const Node& node) const;
-
-    bool inBounds(int x, int y) const;
-
+    std::vector<Node*> getNeighbor(Node* node);
 private:
-    int width, height;
-    std::vector<std::vector<bool>> blocked;
-
+    std::unordered_map<Node*, std::vector<Node*>, NodePtrHasher, NodePtrEqual> adjList;
 };
 
 #endif
-

@@ -1,48 +1,11 @@
 #include "AStar.h"
 
-AStar::AStar(Graph& g) : graph(g) {
-}
+AStar::AStar(Graph* graph) : graph(graph) {}
 
-int AStar::heuristic(Node& a, Node& b) {
-    return static_cast<int>(sqrt(pow(a.x - b.x, 2) + pow(a.y - b.y, 2))); //Euclidean dist
-}
-
-Node AStar::toGridNode(const glm::vec3& pos) const {
-    return Node(pos.x, pos.y);
-}
-
-glm::vec3 AStar::toWorldPos(const Node& node) const {
-    return glm::vec3((float)node.x, 0.0f , (float) node.y);
-}
-
-bool AStar::isInClosedSet(const Node& node, const std::unordered_set<Node>& closedSet) const {
-    return closedSet.find(node) != closedSet.end();
-}
-
-Node* AStar::getNodeFromOpenSet(const Node& node, std::vector<Node*>& openSet) const {
-    for (Node* n : openSet) {
-        if (*n == node) {
-            return n;
-        }
-    }
-    return nullptr;
-}
-
-Node* AStar::getLowestFNode(std::vector<Node*>& openSet) {
-    Node* low = openSet[0];
-    for(Node* n : openSet) {
-        if (n->f() < low->f()) {
-            low = n;
-        }
-    }
-    return low;
-}
-
-std::vector<Node> AStar::reconstructPath(Node* node) {
+std::vector<Node> AStar::backTrackPath(Node* node) {
     std::vector<Node> path;
-
     while(node != nullptr) {
-        path.push_back(*node);
+        path.emplace_back(node);
         node = node->parent;
     }
 
@@ -50,57 +13,51 @@ std::vector<Node> AStar::reconstructPath(Node* node) {
     return path;
 }
 
-std::vector<Node> AStar::getPath(glm::vec3 start, glm::vec3 end) {
-    Node startNode = toGridNode(start);
-    Node endNode = toGridNode(end);
+bool AStar::inVisited(Node* node) {
+    return visited.find(*node) != visited.end();
+}
 
-    std::unordered_set<Node> closedSet;
-    std::vector<Node*> openSet;
-    std::unordered_map<Node, Node> cameFrom;
+float AStar::heuristic(const Node* a, const Node* b) {
+    glm::vec2 delta = a->worPos - b->worPos;
+    return glm::length(delta);
+}
 
-    openSet.push_back(new Node(startNode));
 
-    while(!openSet.empty()) {
-        Node* current = getLowestFNode(openSet);
-        if(*current == endNode) {
-            for(Node* n : openSet) {
-                delete n;
+std::vector<Node> AStar::getPath(Node* start, Node* end) {
+    start->g = 0;
+    start->h = heuristic(start, end);
+    frontier.push(start);
+
+
+    while(!frontier.empty()) {
+        //Pops top (lowest f cost node)
+        Node* node = frontier.top();
+        frontier.pop();
+        visited.emplace(node);
+
+        if(node == end) {
+            return backTrackPath(node);
+        }
+        
+
+        std::vector<Node*> neighbors = graph->getNeighbor(node);
+
+        for (Node* neighbor : neighbors) {
+            // Only checks univisited nodes
+            if (inVisited(neighbor)) continue;
+
+            //our current cost to get to neighbor
+            int tentativeG = node->g + 1;
+
+            if (tentativeG < neighbor->g) {
+                neighbor->g = tentativeG;
+                neighbor->h = heuristic(neighbor, end);
+                neighbor->parent = node;
+                frontier.push(neighbor);
             }
-            return reconstructPath(current);
         }
 
-        closedSet.insert(*current);
-        openSet.erase(std::remove(openSet.begin(), openSet.end(), current), openSet.end());
-
-        for(Node neighbor : graph.getNeighbors(*current)) {
-            if(closedSet.count(neighbor)) continue;
-
-            int G =  current->g + 1;
-            bool inOpenSet = false;
-
-            for(Node* node : openSet) {
-                if(*node == neighbor) {
-                    inOpenSet = true;
-                    if(G < node->g) {
-                        node->g = G;
-                        node->parent = current;
-                    }
-                    break;
-                }
-            }
-
-            if(!inOpenSet) {
-                Node* node = new Node(neighbor);
-                node->g = G;
-                node->h = heuristic(*node, endNode);
-                node->parent = current;
-                openSet.push_back(node);
-            }
-        }
     }
 
-    for(Node* n : openSet) {
-        delete n;
-    }
     return {};
 }
