@@ -1,0 +1,11 @@
+Model Information:
+* title:	Soul Storm Low-Poly Enemy
+* source:	https://sketchfab.com/3d-models/soul-storm-low-poly-enemy-e4cc136c294f4a2c877ddceec0aea00b
+* author:	Rain Hammoura (https://sketchfab.com/MakeItRainArt)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Soul Storm Low-Poly Enemy" (https://sketchfab.com/3d-models/soul-storm-low-poly-enemy-e4cc136c294f4a2c877ddceec0aea00b) by Rain Hammoura (https://sketchfab.com/MakeItRainArt) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
