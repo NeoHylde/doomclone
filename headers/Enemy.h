@@ -4,21 +4,30 @@
 #include "Model.h"
 #include "AStar.h"
 #include <vector>
+#include <iostream>
 
 class Enemy {
     public:
-        Enemy(Model* model);
+        Enemy(Model* model, AStar* astar, glm::vec3 position);
+
+        float snap(float value, float gridSize) {
+            return std::round(value / gridSize) * gridSize;
+        }
+
 
         void getPath(glm::vec3 dest);
 
-        void updatePos(glm::vec3 nextPos);
+        void updatePos(float deltaTime);
 
-        void Draw();
+        void Draw(Shader& shader, Entity& entity);
     private:
+        int pathIndex = 0;
+        float moveSpeed = 1.0f;
+
         std::vector<glm::vec3> currPath;
         glm::vec3 position;
-        AStar AStar;
-        Model model;
+        AStar* astar;
+        Model* model;
 };
 
 #endif
