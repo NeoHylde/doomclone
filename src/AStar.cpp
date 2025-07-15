@@ -2,10 +2,14 @@
 
 AStar::AStar(Graph* graph) : graph(graph) {}
 
-std::vector<Node> AStar::backTrackPath(Node* node) {
-    std::vector<Node> path;
+glm::vec3 AStar::toVec3F(Node node) {
+    return glm::vec3((float)node.worPos.x, 0.0f, (float)node.worPos.y);
+}
+
+std::vector<glm::vec3> AStar::backTrackPath(Node* node) {
+    std::vector<glm::vec3> path;
     while(node != nullptr) {
-        path.emplace_back(node);
+        path.emplace_back(toVec3F(*node));
         node = node->parent;
     }
 
@@ -14,7 +18,7 @@ std::vector<Node> AStar::backTrackPath(Node* node) {
 }
 
 bool AStar::inVisited(Node* node) {
-    return visited.find(*node) != visited.end();
+    return visited.find(node) != visited.end();
 }
 
 float AStar::heuristic(const Node* a, const Node* b) {
@@ -22,8 +26,11 @@ float AStar::heuristic(const Node* a, const Node* b) {
     return glm::length(delta);
 }
 
+std::vector<glm::vec3> AStar::getPath(Node* start, Node* end) {
+    graph->resetNodes();
+    visited.clear();
+    while (!frontier.empty()) frontier.pop();
 
-std::vector<Node> AStar::getPath(Node* start, Node* end) {
     start->g = 0;
     start->h = heuristic(start, end);
     frontier.push(start);

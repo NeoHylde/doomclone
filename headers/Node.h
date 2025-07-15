@@ -2,6 +2,7 @@
 #define NODE_CLASS_H
 
 #include<glm/glm.hpp>
+#include <functional>
 
 
 
@@ -17,8 +18,10 @@ public:
     int getF() const { return g + h; }
 
 
-    Node(glm::vec2);
+    #include "../headers/Node.h"
 
+    Node(glm::vec2 position) : worPos(position) {}
+    
     Node* parent = nullptr; //backtracking
 
     bool operator==(const Node& a) const {
