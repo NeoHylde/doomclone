@@ -8,7 +8,7 @@ glm::vec3 AStar::toVec3F(Node node) {
 
 std::vector<glm::vec3> AStar::backTrackPath(Node* node) {
     std::vector<glm::vec3> path;
-    while(node != nullptr) {
+    while(node->parent != nullptr) {
         path.emplace_back(toVec3F(*node));
         node = node->parent;
     }
@@ -54,7 +54,10 @@ std::vector<glm::vec3> AStar::getPath(Node* start, Node* end) {
             if (inVisited(neighbor)) continue;
 
             //our current cost to get to neighbor
-            int tentativeG = node->g + 1;
+            glm::vec2 diff = neighbor->worPos - node->worPos;
+            float moveCost = (std::abs(diff.x) + std::abs(diff.y) == 2) ? std::sqrt(2.0f) : 1.0f;
+
+            float tentativeG = node->g + moveCost;
 
             if (tentativeG < neighbor->g) {
                 neighbor->g = tentativeG;
