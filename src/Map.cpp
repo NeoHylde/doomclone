@@ -1,7 +1,6 @@
 #include"Map.h"
 
-Map::Map() {
-}
+Map::Map() {} 
 
 void Map::generateGrid(int size, Mesh* floorMesh) {
     for (float i = 0; i < size * 2; i += 2) {
@@ -11,17 +10,21 @@ void Map::generateGrid(int size, Mesh* floorMesh) {
             glm::quat rotation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
             glm::vec3 scale = glm::vec3(1.0f);
 
-            tiles.emplace_back(Tile(floorMesh, position, translation, rotation, scale));
+            components.emplace_back(std::make_unique<Tile>(floorMesh, position, translation, rotation, scale));
         }
     }
+}
+
+std::vector<std::unique_ptr<MapComponent>>& Map::getComponents() {
+    return components;
 }
 
 
 // Checks if tiles in grid are walkable
 bool Map::isPositionWalkable(glm::vec3 pos) {
-    for (auto& tile : tiles) {
-        if (tile.contains(pos)) {
-            return tile.getWalkable();
+    for (auto& component : components) {
+        if (component->contains(pos)) {
+            return component->getWalkable();
         }
     }
     return false;
@@ -32,9 +35,5 @@ void Map::Draw(Entity& entity, Shader& shader)
 {
     for (const auto& component : components) {
         component->Draw(entity, shader);
-    }
-
-    for (Tile tile : tiles) {
-        tile.Draw(entity, shader);
     }
 }
