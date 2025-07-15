@@ -7,9 +7,10 @@
 #include "Entity.h"
 
 #include<glm/glm.hpp>
+#include "MapComponent.h"
 
 
-class Tile{
+class Tile : public MapComponent{
 private:
     glm::vec3 translations;
     glm::quat rotation;
@@ -26,13 +27,13 @@ public:
         glm::quat rotation,
         glm::vec3 scale);
     
-    bool contains(glm::vec3 pos);
+    bool contains(glm::vec3 pos) override;
     
-    bool getWalkable();
+    bool getWalkable() override;
 
     glm::vec3 getPosition();
 
-    void Draw(Entity& entity, Shader& shader);
+    void Draw(Entity& entity, Shader& shader) override;
 };
 
 #endif

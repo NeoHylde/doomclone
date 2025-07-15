@@ -16,11 +16,12 @@
 class Map {
 public:
     std::vector<std::unique_ptr<MapComponent>> components;
-    std::vector<Tile> tiles;
     
     Map();
 
     void generateGrid(int size,  Mesh* floorMesh);
+
+    std::vector<std::unique_ptr<MapComponent>>& getComponents();
 
     bool isPositionWalkable(glm::vec3 pos);
 

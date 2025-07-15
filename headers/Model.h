@@ -8,9 +8,9 @@ using json = nlohmann::json;
 
 class Model {
 public:
-    Model(const char* file);
+    Model(const char* file, glm::vec3 pos);
     
-    void Draw(Shader& shader, Entity& entity);
+    void Draw(Shader& shader, Entity& entity, glm::vec3 translation, glm::quat rotation, glm::vec3 scale);
 private:
     const char* file;
     std::vector<unsigned char> data;

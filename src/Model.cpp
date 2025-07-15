@@ -1,6 +1,6 @@
 #include"Model.h"
 
-Model::Model(const char* file) {
+Model::Model(const char* file, glm::vec3 pos) {
     std::string text = get_file_contents(file);
     JSON = json::parse(text);
 
@@ -12,15 +12,15 @@ Model::Model(const char* file) {
     traverseNode(0);
 }
 
-void Model::Draw(Shader& shader, Entity& entity) {
+void Model::Draw(Shader& shader, Entity& entity, glm::vec3 translation, glm::quat rotation, glm::vec3 scale) {
     for(unsigned int i = 0; i < meshes.size(); i++) {
         meshes[i].Draw(
-            shader, 
+            shader,
             entity, 
             matricesMeshes[i],
-            translationsMeshes[i],
-            rotationsMeshes[i]*glm::quat(glm::angleAxis(glm::radians(90.0f), glm::vec3(0, 1, 0))),
-            scalesMeshes[i]);
+            translationsMeshes[i] + translation * 100.0f,
+            rotationsMeshes[i]*glm::quat(glm::angleAxis(glm::radians(180.0f), glm::vec3(1, 0, 0))),
+            scalesMeshes[i] * scale);
     }
 }
 

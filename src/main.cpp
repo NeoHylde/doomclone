@@ -4,6 +4,9 @@
 #include "../headers/Player.h"
 #include "../headers/MeshFactory.h"
 #include "../headers/Model.h"
+#include "../headers/Enemy.h"
+#include "../headers/AStar.h"
+#include "../headers/Graph.h"
 
 const unsigned int width = 800;
 const unsigned int height = 800;
@@ -78,13 +81,18 @@ int main()
     // Enable depth buffer
     glEnable(GL_DEPTH_TEST);
 
-    Camera camera(width, height, glm::vec3(0.0f, 0.0f, 2.0f));
-    //Player camera(width, height, glm::vec3(4.0f, 2.0f, 2.0f));
-    Model model("resources/skeleton/scene.gltf");
+    //Camera camera(width, height, glm::vec3(0.0f, 0.0f, 2.0f));
+    Player camera(width, height, glm::vec3(4.0f, 2.0f, 2.0f));
+    Model model("resources/skeleton/scene.gltf", glm::vec3(8.0f, 0.0f, 4.0f));
+    Graph graph(map);
+    AStar astar(&graph);
+    Enemy enemy(&model, &astar, glm::vec3(8.0f, 0.0f, 4.0f));
 
     // Main loop
     double previousTime = glfwGetTime(); 
     int frameCount = 0;
+
+    double lastFrameTime = glfwGetTime();
 
     while (!glfwWindowShouldClose(window))
     {
@@ -111,8 +119,7 @@ int main()
             previousTime = currentTime;
         }
 
-        // 4. Handle player input &map
-        camera.Inputs(window);
+        camera.Inputs(window, &map);
         camera.updateMatrix(90.0f, 0.1f, 100.0f);
         /** light->Draw(
             lightShader,
@@ -122,12 +129,28 @@ int main()
             glm::quat(1.0f, 0.0f, 0.0f, 0.0f), // identity rotation
             glm::vec3(1.0f)                // uniform scale
         );*/
-        //map.Draw(camera, shaderProgram);
-        model.Draw(shaderProgram, camera);
+        map.Draw(camera, shaderProgram);
+        enemy.Draw(shaderProgram, camera);
+
+        static glm::vec3 lastTarget = glm::vec3(0.0f);
+        glm::vec3 currentTarget = camera.Position;
+
+        float deltaTime = static_cast<float>(currentTime - lastFrameTime);
+        lastFrameTime = currentTime;
+        enemy.updatePos(deltaTime);
+
+        if (glm::distance(currentTarget, lastTarget) > 1.0f) {
+            enemy.getPath(currentTarget);
+            lastTarget = currentTarget;
+        }
+
+        
 
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
+
+    graph.Delete();
 
     delete light;
     delete floorMesh;

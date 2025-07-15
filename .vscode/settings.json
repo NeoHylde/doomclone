@@ -83,6 +83,11 @@
     "xtree": "cpp",
     "codecvt": "cpp",
     "condition_variable": "cpp",
-    "semaphore": "cpp"
-  }
+    "semaphore": "cpp",
+    "xhash": "cpp",
+    "valarray": "cpp",
+    "unordered_set": "cpp",
+    "queue": "cpp"
+  },
+  "cmake.ignoreCMakeListsMissing": true
 }
