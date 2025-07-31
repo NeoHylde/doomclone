@@ -82,7 +82,7 @@ int main()
     glEnable(GL_DEPTH_TEST);
 
     //Camera camera(width, height, glm::vec3(0.0f, 0.0f, 2.0f));
-    Player camera(width, height, glm::vec3(4.0f, 2.0f, 2.0f));
+    Camera camera(width, height, glm::vec3(4.0f, 2.0f, 2.0f));
     Model model("resources/skeleton/scene.gltf", glm::vec3(8.0f, 0.0f, 4.0f));
     Graph graph(map);
     AStar astar(&graph);
@@ -94,12 +94,27 @@ int main()
 
     double lastFrameTime = glfwGetTime();
 
+    glm::vec3 target = glm::vec3(8.0f, 1.75f, 4.0f); // Same as model position
+
     while (!glfwWindowShouldClose(window))
     {
         // Background color
-        glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
+        glClearColor(0.4f, 0.1f, 0.1f, 1.0f);
         // Clean the back buffer and depth buffer
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        float radius = 2.5f;
+        float camHeight = 2.5f;
+        float camSpeed = 1.0f; // rotations per second
+
+        float angle = static_cast<float>(glfwGetTime()) * camSpeed;
+
+        float camX = target.x + radius * cos(angle);
+        float camZ = target.z + radius * sin(angle);
+        float camY = camHeight;
+
+        camera.Position = glm::vec3(camX, camY, camZ);
+        camera.Orientation = glm::normalize(target - camera.Position);
 
         // Get current time
         double currentTime = glfwGetTime();
@@ -119,17 +134,9 @@ int main()
             previousTime = currentTime;
         }
 
-        camera.Inputs(window, &map);
+        camera.Inputs(window);
         camera.updateMatrix(90.0f, 0.1f, 100.0f);
-        /** light->Draw(
-            lightShader,
-            camera,
-            glm::mat4(1.0f),               // model matrix
-            lightPos,                      // translation
-            glm::quat(1.0f, 0.0f, 0.0f, 0.0f), // identity rotation
-            glm::vec3(1.0f)                // uniform scale
-        );*/
-        map.Draw(camera, shaderProgram);
+        //map.Draw(camera, shaderProgram);
         enemy.Draw(shaderProgram, camera);
 
         static glm::vec3 lastTarget = glm::vec3(0.0f);
@@ -137,14 +144,18 @@ int main()
 
         float deltaTime = static_cast<float>(currentTime - lastFrameTime);
         lastFrameTime = currentTime;
-        enemy.updatePos(deltaTime);
+        //enemy.updatePos(deltaTime);
 
-        if (glm::distance(currentTarget, lastTarget) > 1.0f) {
-            enemy.getPath(currentTarget);
-            lastTarget = currentTarget;
-        }
+        //if (glm::distance(currentTarget, lastTarget) > 1.0f) {
+            //enemy.getPath(currentTarget);
+            //lastTarget = currentTarget;
+        //}
 
-        
+        glm::mat4 view = glm::lookAt(
+            camera.Position,
+            target,               // Look at the model
+            glm::vec3(0.0f, 1.0f, 0.0f) // Up vector
+        );
 
         glfwSwapBuffers(window);
         glfwPollEvents();

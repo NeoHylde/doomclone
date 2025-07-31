@@ -33,8 +33,12 @@ public:
     Camera(int width, int height, glm::vec3 position);
 
     void updateMatrix(float FOVdeg, float nearPlane, float farPlane);
+
     void Matrix(Shader &shader, const char *uniform) override;
+    
     void Inputs(GLFWwindow *window);
+
+    void setPosition(glm::vec3 position);
 };
 
 #endif

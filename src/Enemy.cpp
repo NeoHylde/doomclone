@@ -2,6 +2,7 @@
 
 Enemy::Enemy(Model* model, AStar* astar, glm::vec3 pos) : model(model), astar(astar), position(pos) {}
 
+// Updating path finding
 void Enemy::getPath(glm::vec3 dest) {
     pathIndex = 0;
 
@@ -14,19 +15,23 @@ void Enemy::getPath(glm::vec3 dest) {
     currPath = astar->getPath(start, goal);
 }
 
-
+// Updating position
 void Enemy::updatePos(float deltaTime) {
     std::cout << position.x << ", " << position.z << std::endl;
+    
     if (pathIndex >= currPath.size()) return;
 
     glm::vec3 target = currPath[pathIndex];
+    
     glm::vec3 direction = glm::normalize(target - position);
+    
     float distanceToTarget = glm::length(target - position);
 
     float step = moveSpeed * deltaTime;
 
     if (distanceToTarget <= step) {
         position = target;
+        
         pathIndex++;
     } else {
         position += direction * step;
@@ -35,7 +40,9 @@ void Enemy::updatePos(float deltaTime) {
 
 void Enemy::Draw(Shader& shader, Entity& entity) {
     glm::quat rotation = glm::angleAxis(glm::radians(180.0f), glm::vec3(1, 0, 0));  // Rotate 180° around X
+    
     glm::vec3 scale = glm::vec3(2.0f);
+    
     glm::vec3 flippedPos = glm::vec3(-position.x, position.y, -position.z);
 
     model->Draw(shader, entity, flippedPos, rotation, scale);

@@ -8,21 +8,17 @@
 
 class Node {
 public:
-
-    int h; //heuristic cost from node g
-    int g = INT_MAX; //current cost to get to node
-    int f; //total estimated cost
+    int h;
+    int g = INT_MAX;
+    int f;
     
     glm::vec2 worPos;
     
     int getF() const { return g + h; }
 
-
-    #include "../headers/Node.h"
-
     Node(glm::vec2 position) : worPos(position) {}
     
-    Node* parent = nullptr; //backtracking
+    Node* parent = nullptr;
 
     bool operator==(const Node& a) const {
         return (this->worPos.x == a.worPos.x) && (this->worPos.y == a.worPos.y);

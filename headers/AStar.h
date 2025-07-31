@@ -2,6 +2,7 @@
 #define A_STAR_CLASS_H
 
 #include "Graph.h"
+
 #include <vector>
 #include <unordered_set>
 #include <queue>
@@ -25,7 +26,7 @@ public:
 private:
 
     std::unordered_set<Node*, NodePtrHasher, NodePtrEqual> visited;
-
+    
     struct CompareNode {
         bool operator()(const Node* a, const Node* b) const {
             return a->getF() > b->getF();

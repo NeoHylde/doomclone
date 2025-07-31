@@ -1,6 +1,7 @@
 #ifndef ENTITY_CLASS_H
 #define ENTITY_CLASS_H
 
+// Weird glm requirement to enable this
 #define GLM_ENABLE_EXPERIMENTAL
 
 #include <glad/glad.h>
@@ -16,13 +17,16 @@
 class Entity {
 public: 
     glm::vec3 Position;
+
     glm::vec3 Orientation = glm::vec3(0.0f, 0.0f, -1.0f);
+
     glm::vec3 Up = glm::vec3(0.0f, 1.0f, 0.0f);
+
     glm::mat4 playerMatrix = glm::mat4(1.0f);
 
     virtual ~Entity() = default;
+    
     virtual void Matrix(Shader& shader, const char *uniform) = 0;
-    //virtual void setSpawn(glm::vec3 pos) = 0;
 };
 
 #endif

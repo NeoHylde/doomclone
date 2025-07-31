@@ -6,7 +6,9 @@
 class MeshFactory {
 public:
     static Mesh* createFloorMesh();
+
     static Mesh* createWallMesh();
+    
     static Mesh* createLightMesh();
 };
 

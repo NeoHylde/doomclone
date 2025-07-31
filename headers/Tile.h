@@ -21,11 +21,13 @@ private:
     bool isWalkable = false;
     float size = 2.0f;
 public:
-    Tile(Mesh* mesh, 
+    Tile(
+        Mesh* mesh, 
         glm::vec3 position, 
         glm::vec3 translations,
         glm::quat rotation,
-        glm::vec3 scale);
+        glm::vec3 scale
+    );
     
     bool contains(glm::vec3 pos) override;
     
