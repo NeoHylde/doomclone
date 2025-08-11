@@ -18,12 +18,16 @@ void framebuffer_size_callback(GLFWwindow *window, int width, int height)
     glViewport(0, 0, width, height);
 }
 
-void setUpLight(Shader& lightShader, glm::vec3 lightPos, glm::mat4 lightModel, glm::vec4 lightColor) {
+void setUpShading(Shader& lightShader, Shader& shaderProgram, glm::vec3 lightPos, glm::mat4 lightModel, glm::vec4 lightColor) {
     lightModel = glm::translate(lightModel, lightPos);
 
     lightShader.Activate();
     glUniformMatrix4fv(glGetUniformLocation(lightShader.ID, "model"), 1, GL_FALSE, glm::value_ptr(lightModel));
     glUniform4f(glGetUniformLocation(lightShader.ID, "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
+
+    shaderProgram.Activate();
+    glUniform4f(glGetUniformLocation(shaderProgram.ID, "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
+    glUniform3f(glGetUniformLocation(shaderProgram.ID, "lightPos"), lightPos.x, lightPos.y, lightPos.z);
 }
 
 int main()
@@ -58,37 +62,36 @@ int main()
     glViewport(0, 0, width, height);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-    // Scene Setup
+    // --- Scene Setup ---
+
+    // Shaders and Lighting
     Shader shaderProgram("resources/shaders/default.vert", "resources/shaders/default.frag");
     Shader lightShader("resources/shaders/light.vert", "resources/shaders/light.frag");
-
-    MeshFactory mf;
-    Mesh* floorMesh = mf.createFloorMesh();
-    Mesh* light = mf.createLightMesh();
-
-    Map map;
-    map.generateGrid(8, floorMesh);
 
     glm::vec4 lightColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
     glm::vec3 lightPos = glm::vec3(0.5f, 0.5f, 0.5f);
     glm::mat4 lightModel = glm::mat4(1.0f);
-    setUpLight(lightShader, lightPos, lightModel, lightColor);
+    setUpShading(lightShader, shaderProgram, lightPos, lightModel, lightColor);
     
-    shaderProgram.Activate();
-    glUniform4f(glGetUniformLocation(shaderProgram.ID, "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
-    glUniform3f(glGetUniformLocation(shaderProgram.ID, "lightPos"), lightPos.x, lightPos.y, lightPos.z);
-
     // Enable depth buffer
     glEnable(GL_DEPTH_TEST);
-
-    //Camera camera(width, height, glm::vec3(0.0f, 0.0f, 2.0f));
+    
+    //Camera setup
+    //Player camera(width, height, glm::vec3(0.0f, 0.0f, 2.0f));
     Camera camera(width, height, glm::vec3(4.0f, 2.0f, 2.0f));
+
+    //Map setup
+    MeshFactory mf;
+    Mesh* floorMesh = mf.createFloorMesh();
+    Map map;
+
+    //Enemy setup
     Model model("resources/skeleton/scene.gltf", glm::vec3(8.0f, 0.0f, 4.0f));
     Graph graph(map);
     AStar astar(&graph);
     Enemy enemy(&model, &astar, glm::vec3(8.0f, 0.0f, 4.0f));
 
-    // Main loop
+    // Main rendering loop
     double previousTime = glfwGetTime(); 
     int frameCount = 0;
 
@@ -121,7 +124,6 @@ int main()
         frameCount++;
 
         // If one second has passed, calculate and show FPS
-        
         if (currentTime - previousTime >= 1.0) {
             std::string printable = 
                 std::to_string(camera.Position.x) + ", " +
@@ -136,7 +138,6 @@ int main()
 
         camera.Inputs(window);
         camera.updateMatrix(90.0f, 0.1f, 100.0f);
-        //map.Draw(camera, shaderProgram);
         enemy.Draw(shaderProgram, camera);
 
         static glm::vec3 lastTarget = glm::vec3(0.0f);
@@ -163,7 +164,6 @@ int main()
 
     graph.Delete();
 
-    delete light;
     delete floorMesh;
     shaderProgram.Delete();
     lightShader.Delete();
