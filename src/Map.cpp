@@ -1,6 +1,27 @@
 #include"Map.h"
 
+/**
+ *      Standard size for component is 4x4
+ *                 __________
+ *      Room      |          |
+ *                |          |
+ *                |          |
+ *                |__________|
+ * 
+ *      Corridor
+ *                ____________
+ *               |
+ *               |
+ *                 
+ * 
+ */
+
+
 Map::Map() {} 
+
+void Map::readMap(std::string file_pth) {
+
+}
 
 void Map::generateGrid(int size, Mesh* floorMesh) {
     for (float i = 0; i < size * 2; i += 2) {
@@ -14,6 +35,7 @@ void Map::generateGrid(int size, Mesh* floorMesh) {
         }
     }
 }
+
 
 std::vector<std::unique_ptr<MapComponent>>& Map::getComponents() {
     return components;

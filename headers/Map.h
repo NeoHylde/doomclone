@@ -19,6 +19,8 @@ public:
     
     Map();
 
+    void readMap(std::string file_pth);
+
     void generateGrid(int size,  Mesh* floorMesh);
 
     std::vector<std::unique_ptr<MapComponent>>& getComponents();
