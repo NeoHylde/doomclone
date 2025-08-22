@@ -77,13 +77,14 @@ int main()
     glEnable(GL_DEPTH_TEST);
     
     //Camera setup
-    //Player camera(width, height, glm::vec3(0.0f, 0.0f, 2.0f));
+    //Player camera(width, height, glm::vec3(4.0f, 2.0f, 2.0f));
     Camera camera(width, height, glm::vec3(4.0f, 2.0f, 2.0f));
 
     //Map setup
     MeshFactory mf;
     Mesh* floorMesh = mf.createFloorMesh();
     Map map;
+    map.generateGrid(8, floorMesh);
 
     //Enemy setup
     Model model("resources/skeleton/scene.gltf", glm::vec3(8.0f, 0.0f, 4.0f));
@@ -97,27 +98,12 @@ int main()
 
     double lastFrameTime = glfwGetTime();
 
-    glm::vec3 target = glm::vec3(8.0f, 1.75f, 4.0f); // Same as model position
-
     while (!glfwWindowShouldClose(window))
     {
         // Background color
         glClearColor(0.4f, 0.1f, 0.1f, 1.0f);
         // Clean the back buffer and depth buffer
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        float radius = 2.5f;
-        float camHeight = 2.5f;
-        float camSpeed = 1.0f; // rotations per second
-
-        float angle = static_cast<float>(glfwGetTime()) * camSpeed;
-
-        float camX = target.x + radius * cos(angle);
-        float camZ = target.z + radius * sin(angle);
-        float camY = camHeight;
-
-        camera.Position = glm::vec3(camX, camY, camZ);
-        camera.Orientation = glm::normalize(target - camera.Position);
 
         // Get current time
         double currentTime = glfwGetTime();
@@ -139,6 +125,7 @@ int main()
         camera.Inputs(window);
         camera.updateMatrix(90.0f, 0.1f, 100.0f);
         enemy.Draw(shaderProgram, camera);
+        map.Draw(camera, shaderProgram);
 
         static glm::vec3 lastTarget = glm::vec3(0.0f);
         glm::vec3 currentTarget = camera.Position;
@@ -151,12 +138,6 @@ int main()
             //enemy.getPath(currentTarget);
             //lastTarget = currentTarget;
         //}
-
-        glm::mat4 view = glm::lookAt(
-            camera.Position,
-            target,               // Look at the model
-            glm::vec3(0.0f, 1.0f, 0.0f) // Up vector
-        );
 
         glfwSwapBuffers(window);
         glfwPollEvents();
