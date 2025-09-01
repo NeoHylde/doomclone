@@ -1,6 +1,6 @@
 # DoomClone
 
-**DoomClone** is an experimental 3D game built with **OpenGL** and **C++**. This project serves as a hands-on exploration of real-time rendering, shader programming, and basic game engine architecture.
+**DoomClone** is an experimental 3D renderer/game built with **OpenGL** and **C++**. This project serves as a hands-on exploration of real-time rendering, shader programming, and basic game engine architecture.
 
 ---
 
