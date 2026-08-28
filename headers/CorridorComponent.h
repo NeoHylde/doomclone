@@ -1,5 +1,5 @@
 #ifndef CORRIDOR_COMPONENT_HEADER
-#define CORRIDOR_COMPONENT HEADER
+#define CORRIDOR_COMPONENT_HEADER
 
 #include "MapComponent.h"
 #include <vector>
