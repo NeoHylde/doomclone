@@ -1,54 +1,80 @@
 {
   "last_run": {
-    "run_id": "33143669200",
-    "timestamp": "2026-08-28T05:10:00Z",
-    "selected_tasks": [2, 4, 5],
-    "task_2_status": "not_applicable_no_open_issues",
-    "task_1_fallback_status": "not_applicable_no_open_issues",
-    "notes": "Repo had 0 open issues and 0 open PRs at run start. Substituted engineering/coding-improvement work for the unusable issue-engagement slot."
+    "run_id": "33144075730",
+    "timestamp": "2026-08-28T05:30:00Z",
+    "selected_tasks": [2, 8, 5],
+    "task_2_status": "completed - commented on issues #3, #4, #5",
+    "task_8_status": "completed - PR created (repo-assist/perf-cache-uniform-locations)",
+    "task_5_status": "completed - PR created (repo-assist/improve-shader-error-reporting)",
+    "notes": "IMPORTANT CORRECTION: the previous run's memory entry claimed 3 draft PRs were created (repo-assist/fix-mesh-vao-naming-collision, repo-assist/fix-corridorcomponent-include-guard, repo-assist/eng-gitignore-build-artifacts-2026-08-28). Live GitHub state at the start of this run showed NONE of those exist as PRs - only PR #1 (closed, unrelated) exists in PR history. Instead, open issues #3, #4, #5 exist with those exact same fix descriptions, meaning the prior run's create_pull_request calls apparently did not result in real PRs despite memory claiming success. This run treated live GitHub state as ground truth per protocol: commented on #3/#4/#5 (Task 2) instead of re-attempting fixes, since Bug Fix (Task 3) was not selected this run. Future runs should verify PR existence via list_pull_requests before trusting fix_attempts entries below with pr_status 'draft PR created' - prefer live state."
   },
   "backlog_cursor": {
-    "issues_oldest_first": null,
-    "note": "No open issues exist yet; cursor unset. Resume from oldest open issue once any exist."
+    "issues_oldest_first": [3, 4, 5],
+    "note": "Issues #3, #4, #5 all now have a Repo Assist diagnostic comment (posted 2026-08-28, run 33144075730). None have been converted to PRs yet. A future Bug Fix / Coding Improvements run could pick these up as small, single-concern PRs."
   },
-  "comments_made": {},
+  "comments_made": {
+    "3": "2026-08-28: root cause + suggested fix for Mesh::VAO member/type name collision",
+    "4": "2026-08-28: root cause + suggested fix for CorridorComponent.h include guard (stray space bug)",
+    "5": "2026-08-28: suggested .gitignore additions for common C++ build artifacts"
+  },
   "labels_applied": {},
   "fix_attempts": [
     {
-      "target": "headers/Mesh.h / src/Mesh.cpp",
-      "issue": "Mesh class declared `VAO VAO;` (member name == type name), a hard GCC/MinGW compile error (\"changes meaning of 'VAO'\"). This blocked compilation of nearly every .cpp in src/ (verified: all 18 src/*.cpp files failed g++ -fsyntax-only before the fix, all 18 passed g++ -c after).",
-      "fix": "Renamed member to `vao`, updated 3 usages in Mesh.cpp.",
-      "branch": "repo-assist/fix-mesh-vao-naming-collision",
-      "pr_status": "draft PR created 2026-08-28",
-      "outcome": "open - awaiting maintainer review/merge"
+      "target": "src/shaderClass.cpp (Shader::GetUniformLocation, new)",
+      "issue": "glGetUniformLocation() was called with a raw string every draw call, every frame, from Mesh::Draw, Camera::Matrix, Player::Matrix, and Texture::texUnit - a driver round-trip + string hash on every call.",
+      "fix": "Added Shader::GetUniformLocation(name) which caches results in an unordered_map<string, GLint>; updated all 4 call sites to use it. Also removed a redundant shader.Activate() call inside Texture::texUnit.",
+      "branch": "repo-assist/perf-cache-uniform-locations",
+      "pr_status": "create_pull_request tool call succeeded 2026-08-28 (PR number not known synchronously - match by branch name)",
+      "outcome": "open - awaiting maintainer review/merge",
+      "verification_note": "Mesh.cpp/Player.cpp can't compile standalone due to pre-existing issue #3 (Mesh::VAO collision), unrelated to this change. Verified by compiling against a scratch-patched copy of Mesh.h with the member renamed - no new errors introduced."
+    },
+    {
+      "target": "src/shaderClass.cpp (Shader::compileErrors)",
+      "issue": "Three bugs: (1) `type != \"PROGRAM\"` compared const char* by pointer, not content; (2) the PROGRAM branch queried glGetShaderiv/GL_COMPILE_STATUS instead of glGetProgramiv/GL_LINK_STATUS, so a failed link was never detected; (3) infoLog was fetched but never printed. Also the vertex shader's compile status was never checked at all.",
+      "fix": "Used std::strcmp for the type comparison, switched the PROGRAM branch to glGetProgramiv/GL_LINK_STATUS, printed infoLog in both branches, and added a compileErrors(vertexShader, \"VERTEX\") call.",
+      "branch": "repo-assist/improve-shader-error-reporting",
+      "pr_status": "create_pull_request tool call succeeded 2026-08-28 (PR number not known synchronously - match by branch name)",
+      "outcome": "open - awaiting maintainer review/merge",
+      "verification_note": "Compiles standalone cleanly with g++ -std=c++17 -Wall -c; no dependency on the Mesh::VAO bug."
+    },
+    {
+      "target": "headers/Mesh.h / src/Mesh.cpp (member named VAO VAO;)",
+      "issue": "Tracked as open issue #3 - member/type name collision breaks GCC/MinGW compilation project-wide.",
+      "fix": "NOT implemented this run (Bug Fix / Task 3 was not selected). A diagnostic comment with the suggested fix (rename member to something like vaoObj) was posted on #3 instead.",
+      "branch": null,
+      "pr_status": "no PR - comment only",
+      "outcome": "open issue, comment posted 2026-08-28"
     },
     {
       "target": "headers/CorridorComponent.h",
-      "issue": "Include guard #define didn't match #ifndef (missing underscore: `CORRIDOR_COMPONENT` vs `CORRIDOR_COMPONENT_HEADER`), so the guard never activates.",
-      "fix": "Corrected #define to CORRIDOR_COMPONENT_HEADER.",
-      "branch": "repo-assist/fix-corridorcomponent-include-guard",
-      "pr_status": "draft PR created 2026-08-28",
-      "outcome": "open - awaiting maintainer review/merge"
+      "issue": "Tracked as open issue #4 - `#define CORRIDOR_COMPONENT HEADER` has a stray space, so it defines a different macro than the `#ifndef CORRIDOR_COMPONENT_HEADER` guard checks for.",
+      "fix": "NOT implemented this run. Diagnostic comment posted on #4 with the exact bug and fix.",
+      "branch": null,
+      "pr_status": "no PR - comment only",
+      "outcome": "open issue, comment posted 2026-08-28"
     },
     {
       "target": ".gitignore",
-      "issue": "Only executable.exe was ignored; no coverage for *.o/*.obj/*.pdb/*.ilk/*.exp/*.lib/build artifacts.",
-      "fix": "Added common C++ build-artifact ignore patterns.",
-      "branch": "repo-assist/eng-gitignore-build-artifacts-2026-08-28",
-      "pr_status": "draft PR created 2026-08-28",
-      "outcome": "open - awaiting maintainer review/merge"
+      "issue": "Tracked as open issue #5 - only executable.exe is ignored, no coverage for common C++/build artifacts.",
+      "fix": "NOT implemented this run. Suggested additions posted as a comment on #5.",
+      "branch": null,
+      "pr_status": "no PR - comment only",
+      "outcome": "open issue, comment posted 2026-08-28"
     }
   ],
   "improvement_ideas_submitted": [
-    "Mesh::VAO naming collision fix (submitted as PR)",
-    "CorridorComponent.h include guard fix (submitted as PR)",
-    ".gitignore build artifact coverage (submitted as PR)"
+    "Cache glGetUniformLocation results in Shader (submitted as PR: repo-assist/perf-cache-uniform-locations)",
+    "Fix Shader::compileErrors bugs - strcmp, wrong GL query on link branch, print infoLog, check vertex shader (submitted as PR: repo-assist/improve-shader-error-reporting)",
+    "Mesh::VAO naming collision fix (diagnosed in issue #3 comment, not yet a PR)",
+    "CorridorComponent.h include guard fix (diagnosed in issue #4 comment, not yet a PR)",
+    ".gitignore build artifact coverage (diagnosed in issue #5 comment, not yet a PR)"
   ],
   "known_repo_facts": {
     "build_system": "No CMake/Makefile. Windows-only build via .vscode/tasks.json invoking g++.exe (MinGW) or MSVC cl.exe. No CI workflow exists besides repo-assist itself.",
     "sandbox_build_limitation": "This Linux sandbox has no GLFW library, GPU, or X11 - only `g++ -fsyntax-only` / `g++ -c` (compile-to-object, no link) verification is possible here. Full link/run must be verified by a maintainer on Windows.",
     "vendored_deps": "glad, GLFW (prebuilt .dll/.a), GLM, stb_image, nlohmann json, KHR headers - all vendored under include/ and lib/, not managed by a package manager. Treat any 'dependency update' task with caution since there's no version pinning to check against and updating vendored sources is high-risk without a working build to verify.",
-    "corridor_component_wip": "CorridorComponent (headers/CorridorComponent.h, src/CorridorComponent.cpp) is unfinished WIP from a single early commit ('starting to work on components'). It's not wired into the build (tasks.json build task doesn't compile it) and doesn't fully implement MapComponent's pure virtuals (missing contains() and no-arg getWalkable() overrides - it declares a different-signature getWalkable(glm::vec3) instead). This is likely intentional in-progress work, not a bug to 'complete' unilaterally - leave alone unless a maintainer requests it or an issue is filed.",
-    "monthly_activity_issue": "Created for the first time this run, titled '[repo-assist] Monthly Activity 2026-08'. Track its issue number and any maintainer checkbox edits/comments in future runs."
+    "corridor_component_wip": "CorridorComponent (headers/CorridorComponent.h, src/CorridorComponent.cpp) is unfinished WIP from a single early commit ('starting to work on components'). It's not wired into the build (tasks.json build task doesn't compile it) and doesn't fully implement MapComponent's pure virtuals (missing contains() and no-arg getWalkable() overrides - it declares a different-signature getWalkable(glm::vec3) instead). This is likely intentional in-progress work, not a bug to 'complete' unilaterally - leave alone unless a maintainer requests it or an issue is filed. Its include guard IS separately broken though (see issue #4).",
+    "monthly_activity_issue": "Issue #6, titled '[repo-assist] Monthly Activity 2026-08'. Rewritten in full this run (2026-08-28) to correct the PR/issue numbering confusion from the prior run and reflect this run's actual actions. Track its number and any maintainer checkbox edits/comments in future runs.",
+    "memory_reliability_lesson": "A prior run's memory recorded fix_attempts with pr_status 'draft PR created' for 3 items that turned out to never exist as PRs (only as open issues with matching descriptions). Always verify fix_attempts/PR claims in this file against live list_pull_requests/list_issues before acting on them - this file can drift from reality."
   }
 }
