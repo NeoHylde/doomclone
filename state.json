@@ -1,0 +1,54 @@
+{
+  "last_run": {
+    "run_id": "33143669200",
+    "timestamp": "2026-08-28T05:10:00Z",
+    "selected_tasks": [2, 4, 5],
+    "task_2_status": "not_applicable_no_open_issues",
+    "task_1_fallback_status": "not_applicable_no_open_issues",
+    "notes": "Repo had 0 open issues and 0 open PRs at run start. Substituted engineering/coding-improvement work for the unusable issue-engagement slot."
+  },
+  "backlog_cursor": {
+    "issues_oldest_first": null,
+    "note": "No open issues exist yet; cursor unset. Resume from oldest open issue once any exist."
+  },
+  "comments_made": {},
+  "labels_applied": {},
+  "fix_attempts": [
+    {
+      "target": "headers/Mesh.h / src/Mesh.cpp",
+      "issue": "Mesh class declared `VAO VAO;` (member name == type name), a hard GCC/MinGW compile error (\"changes meaning of 'VAO'\"). This blocked compilation of nearly every .cpp in src/ (verified: all 18 src/*.cpp files failed g++ -fsyntax-only before the fix, all 18 passed g++ -c after).",
+      "fix": "Renamed member to `vao`, updated 3 usages in Mesh.cpp.",
+      "branch": "repo-assist/fix-mesh-vao-naming-collision",
+      "pr_status": "draft PR created 2026-08-28",
+      "outcome": "open - awaiting maintainer review/merge"
+    },
+    {
+      "target": "headers/CorridorComponent.h",
+      "issue": "Include guard #define didn't match #ifndef (missing underscore: `CORRIDOR_COMPONENT` vs `CORRIDOR_COMPONENT_HEADER`), so the guard never activates.",
+      "fix": "Corrected #define to CORRIDOR_COMPONENT_HEADER.",
+      "branch": "repo-assist/fix-corridorcomponent-include-guard",
+      "pr_status": "draft PR created 2026-08-28",
+      "outcome": "open - awaiting maintainer review/merge"
+    },
+    {
+      "target": ".gitignore",
+      "issue": "Only executable.exe was ignored; no coverage for *.o/*.obj/*.pdb/*.ilk/*.exp/*.lib/build artifacts.",
+      "fix": "Added common C++ build-artifact ignore patterns.",
+      "branch": "repo-assist/eng-gitignore-build-artifacts-2026-08-28",
+      "pr_status": "draft PR created 2026-08-28",
+      "outcome": "open - awaiting maintainer review/merge"
+    }
+  ],
+  "improvement_ideas_submitted": [
+    "Mesh::VAO naming collision fix (submitted as PR)",
+    "CorridorComponent.h include guard fix (submitted as PR)",
+    ".gitignore build artifact coverage (submitted as PR)"
+  ],
+  "known_repo_facts": {
+    "build_system": "No CMake/Makefile. Windows-only build via .vscode/tasks.json invoking g++.exe (MinGW) or MSVC cl.exe. No CI workflow exists besides repo-assist itself.",
+    "sandbox_build_limitation": "This Linux sandbox has no GLFW library, GPU, or X11 - only `g++ -fsyntax-only` / `g++ -c` (compile-to-object, no link) verification is possible here. Full link/run must be verified by a maintainer on Windows.",
+    "vendored_deps": "glad, GLFW (prebuilt .dll/.a), GLM, stb_image, nlohmann json, KHR headers - all vendored under include/ and lib/, not managed by a package manager. Treat any 'dependency update' task with caution since there's no version pinning to check against and updating vendored sources is high-risk without a working build to verify.",
+    "corridor_component_wip": "CorridorComponent (headers/CorridorComponent.h, src/CorridorComponent.cpp) is unfinished WIP from a single early commit ('starting to work on components'). It's not wired into the build (tasks.json build task doesn't compile it) and doesn't fully implement MapComponent's pure virtuals (missing contains() and no-arg getWalkable() overrides - it declares a different-signature getWalkable(glm::vec3) instead). This is likely intentional in-progress work, not a bug to 'complete' unilaterally - leave alone unless a maintainer requests it or an issue is filed.",
+    "monthly_activity_issue": "Created for the first time this run, titled '[repo-assist] Monthly Activity 2026-08'. Track its issue number and any maintainer checkbox edits/comments in future runs."
+  }
+}
