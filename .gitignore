@@ -1,1 +1,12 @@
 executable.exe
+
+# Build artifacts
+*.exe
+*.o
+*.obj
+*.out
+*.pdb
+*.ilk
+*.exp
+*.lib
+build/
