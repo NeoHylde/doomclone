@@ -65,8 +65,9 @@ Texture::Texture(const char *image, const char* texType, GLuint slot)
 
 void Texture::texUnit(Shader &shader, const char *uniform, GLuint unit)
 {
-    GLuint texUni = glGetUniformLocation(shader.ID, uniform);
-    shader.Activate();
+    // Callers activate the shader before drawing textures; re-activating here
+    // for every texture on every mesh, every frame, is a redundant driver call.
+    GLint texUni = shader.GetUniformLocation(uniform);
     glUniform1i(texUni, unit);
 }
 void Texture::Bind()

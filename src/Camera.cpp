@@ -23,7 +23,7 @@ void Camera::updateMatrix(float FOVdeg, float nearPlane, float farPlane)
 // Sends camera's view-projection matrix to opengl shader 
 void Camera::Matrix(Shader &shader, const char *uniform)
 {
-    glUniformMatrix4fv(glGetUniformLocation(shader.ID, uniform), 1, GL_FALSE, glm::value_ptr(cameraMatrix));
+    glUniformMatrix4fv(shader.GetUniformLocation(uniform), 1, GL_FALSE, glm::value_ptr(cameraMatrix));
 }
 
 void Camera::setPosition(glm::vec3 position) {

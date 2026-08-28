@@ -18,7 +18,7 @@ void Player::updateMatrix(float FOVdeg, float nearPlane, float farPlane) {
 
 void Player::Matrix(Shader &shader, const char *uniform)
 {
-    glUniformMatrix4fv(glGetUniformLocation(shader.ID, uniform), 1, GL_FALSE, glm::value_ptr(playerMatrix));
+    glUniformMatrix4fv(shader.GetUniformLocation(uniform), 1, GL_FALSE, glm::value_ptr(playerMatrix));
 }
 
 void Player::Inputs(GLFWwindow *window, Map* map)
