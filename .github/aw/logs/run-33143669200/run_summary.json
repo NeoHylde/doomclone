@@ -1,0 +1,488 @@
+{
+  "cli_version": "v0.86.2",
+  "run_id": 33143669200,
+  "processed_at": "2026-08-27T22:05:35.3586472-07:00",
+  "run": {
+    "databaseId": 33143669200,
+    "number": 3,
+    "url": "https://github.com/NeoHylde/doomclone/actions/runs/33143669200",
+    "status": "in_progress",
+    "conclusion": "",
+    "workflowName": "Repo Assist",
+    "workflowPath": ".github/workflows/repo-assist.lock.yml",
+    "createdAt": "2026-08-28T05:04:43Z",
+    "startedAt": "2026-08-28T05:04:43Z",
+    "updatedAt": "2026-08-28T05:05:15Z",
+    "event": "workflow_dispatch",
+    "headBranch": "master",
+    "headSha": "d1e4f4cfa0d80e4d72fd26fb0d28ba765735d295",
+    "displayTitle": "Repo Assist",
+    "Duration": 32000000000,
+    "ActionMinutes": 0,
+    "TokenUsage": 0,
+    "Turns": 0,
+    "TurnsAvailable": false,
+    "ErrorCount": 0,
+    "WarningCount": 0,
+    "MissingToolCount": 0,
+    "MissingDataCount": 0,
+    "NoopCount": 0,
+    "EffectiveTokens": 0,
+    "AvgTimeBetweenTurns": 0,
+    "LogsPath": "C:\\Users\\neohy\\neo-cs-projects\\doomclone\\.github\\aw\\logs\\run-33143669200"
+  },
+  "metrics": {
+    "TokenUsage": 0,
+    "EstimatedCost": 0,
+    "Turns": 0,
+    "ToolCalls": null,
+    "ToolSequences": null,
+    "AvgTimeBetweenTurns": 0,
+    "MaxTimeBetweenTurns": 0,
+    "MedianTimeBetweenTurns": 0,
+    "StdDevTimeBetweenTurns": 0
+  },
+  "task_domain": {
+    "name": "code_fix",
+    "label": "Code Fix",
+    "reason": "The workflow appears oriented toward code changes or pull request review."
+  },
+  "behavior_fingerprint": {
+    "execution_style": "directed",
+    "tool_breadth": "narrow",
+    "actuation_style": "read_only",
+    "resource_profile": "lean",
+    "dispatch_mode": "standalone",
+    "agentic_fraction": 0
+  },
+  "access_analysis": null,
+  "firewall_analysis": null,
+  "redacted_domains_analysis": null,
+  "missing_tools": null,
+  "missing_data": null,
+  "noops": null,
+  "mcp_failures": null,
+  "github_rate_limit_usage": {
+    "total_requests_made": 3,
+    "core_consumed": 2,
+    "core_consumed_source": "response_headers_delta",
+    "core_remaining": 4989,
+    "core_limit": 5000,
+    "resources": [
+      {
+        "resource": "core",
+        "requests_made": 3,
+        "quota_consumed": 2,
+        "final_remaining": 4989,
+        "limit": 5000
+      }
+    ]
+  },
+  "artifacts_list": [
+    ".downloaded-artifacts\\all",
+    "aw-prompts\\prompt-import-tree.json",
+    "aw-prompts\\prompt-template.txt",
+    "aw-prompts\\prompt.txt",
+    "aw_info.json",
+    "base\\.github\\skills\\agentic-workflows\\SKILL.md",
+    "base\\.github\\workflows\\repo-assist.lock.yml",
+    "base\\.github\\workflows\\repo-assist.md",
+    "github_rate_limits.jsonl",
+    "models.json"
+  ],
+  "job_details": [
+    {
+      "name": "pre_activation",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-08-28T05:04:48Z",
+      "completed_at": "2026-08-28T05:04:55Z",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Setup Scripts",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Check command position",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Check team membership for command workflow",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run MAX_OPEN_PRS=8",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Setup Scripts",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ],
+      "Duration": 7000000000
+    },
+    {
+      "name": "activation",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-08-28T05:04:59Z",
+      "completed_at": "2026-08-28T05:05:11Z",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Setup Scripts",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Generate agentic run info",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Restore daily AIC usage cache",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Restore daily AIC usage cache (artifact fallback)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Check daily workflow token guardrail",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Add eyes reaction for immediate feedback",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Validate ANTHROPIC_API_KEY secret",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Check for OAuth tokens",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Checkout .github and .agents folders",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Save agent config folders for base branch restoration",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Check workflow lock file",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Check compile-agentic version",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Compute current body text",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Add comment with workflow run link",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Log runtime features",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Create prompt with built-in context",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Interpolate variables and render templates",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Substitute placeholders",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Validate prompt placeholders",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Print prompt",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Stage prompt files for artifact upload",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Upload activation artifact",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Checkout .github and .agents folders",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Setup Scripts",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ],
+      "Duration": 12000000000
+    },
+    {
+      "name": "agent",
+      "status": "in_progress",
+      "conclusion": "",
+      "started_at": "2026-08-28T05:05:14Z",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Setup Scripts",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Set runtime paths",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Checkout repository",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Fetch additional refs",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Create gh-aw temp directory",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Configure gh CLI for GitHub Enterprise",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Start DIFC Proxy",
+          "status": "in_progress"
+        },
+        {
+          "name": "Download activation artifact",
+          "status": "pending"
+        },
+        {
+          "name": "Clone repo-memory branch (default)",
+          "status": "pending"
+        },
+        {
+          "name": "Fetch repo data for task weighting",
+          "status": "pending"
+        },
+        {
+          "name": "Configure Git credentials",
+          "status": "pending"
+        },
+        {
+          "name": "Checkout PR branch",
+          "status": "pending"
+        },
+        {
+          "name": "Setup Node.js",
+          "status": "pending"
+        },
+        {
+          "name": "Install AWF binary",
+          "status": "pending"
+        },
+        {
+          "name": "Install Claude Code CLI",
+          "status": "pending"
+        },
+        {
+          "name": "Determine automatic lockdown mode for GitHub MCP Server",
+          "status": "pending"
+        },
+        {
+          "name": "Parse integrity filter lists",
+          "status": "pending"
+        },
+        {
+          "name": "Stop DIFC Proxy",
+          "status": "pending"
+        },
+        {
+          "name": "Restore agent config folders from base branch",
+          "status": "pending"
+        },
+        {
+          "name": "Restore inline sub-agents from activation artifact",
+          "status": "pending"
+        },
+        {
+          "name": "Restore inline skills from activation artifact",
+          "status": "pending"
+        },
+        {
+          "name": "Download container images",
+          "status": "pending"
+        },
+        {
+          "name": "Generate Safe Outputs Config",
+          "status": "pending"
+        },
+        {
+          "name": "Generate Safe Outputs Tools",
+          "status": "pending"
+        },
+        {
+          "name": "Start MCP Gateway",
+          "status": "pending"
+        },
+        {
+          "name": "Mount MCP servers as CLIs",
+          "status": "pending"
+        },
+        {
+          "name": "Clean credentials",
+          "status": "pending"
+        },
+        {
+          "name": "Audit pre-agent workspace",
+          "status": "pending"
+        },
+        {
+          "name": "Execute Claude Code CLI",
+          "status": "pending"
+        },
+        {
+          "name": "Detect agent errors",
+          "status": "pending"
+        },
+        {
+          "name": "Configure Git credentials",
+          "status": "pending"
+        },
+        {
+          "name": "Stop MCP Gateway",
+          "status": "pending"
+        },
+        {
+          "name": "Redact secrets in logs",
+          "status": "pending"
+        },
+        {
+          "name": "Append agent step summary",
+          "status": "pending"
+        },
+        {
+          "name": "Copy Safe Outputs",
+          "status": "pending"
+        },
+        {
+          "name": "Ingest agent output",
+          "status": "pending"
+        },
+        {
+          "name": "Parse agent logs for step summary",
+          "status": "pending"
+        },
+        {
+          "name": "Parse MCP Gateway logs for step summary",
+          "status": "pending"
+        },
+        {
+          "name": "Print firewall logs",
+          "status": "pending"
+        },
+        {
+          "name": "Parse token usage for step summary",
+          "status": "pending"
+        },
+        {
+          "name": "Print AWF reflect summary",
+          "status": "pending"
+        },
+        {
+          "name": "Write agent output placeholder if missing",
+          "status": "pending"
+        },
+        {
+          "name": "Sanitize repo-memory filenames (default)",
+          "status": "pending"
+        },
+        {
+          "name": "Upload repo-memory artifact (default)",
+          "status": "pending"
+        },
+        {
+          "name": "Upload agent artifacts",
+          "status": "pending"
+        },
+        {
+          "name": "Post Checkout repository",
+          "status": "pending"
+        },
+        {
+          "name": "Post Setup Scripts",
+          "status": "pending"
+        }
+      ],
+      "Duration": 0
+    }
+  ]
+}

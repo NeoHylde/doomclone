@@ -1,0 +1,23 @@
+﻿2026-08-28T04:48:49.2273040Z ##[group]Run actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3
+2026-08-28T04:48:49.2273867Z with:
+2026-08-28T04:48:49.2275828Z   script: const { setupGlobals } = require('/home/runner/work/_temp/gh-aw/actions/setup_globals.cjs');
+setupGlobals(core, github, context, exec, io, getOctokit);
+const { main } = require('/home/runner/work/_temp/gh-aw/actions/check_command_position.cjs');
+await main();
+
+2026-08-28T04:48:49.2281010Z   github-token: ***
+2026-08-28T04:48:49.2281471Z   debug: false
+2026-08-28T04:48:49.2281923Z   user-agent: actions/github-script
+2026-08-28T04:48:49.2282469Z   result-encoding: json
+2026-08-28T04:48:49.2282932Z   retries: 0
+2026-08-28T04:48:49.2283417Z   retry-exempt-status-codes: 400,401,403,404,422
+2026-08-28T04:48:49.2284000Z env:
+2026-08-28T04:48:49.2284659Z   GH_AW_RUNTIME_FEATURES: 
+2026-08-28T04:48:49.2285263Z   GITHUB_AW_OTEL_TRACE_ID: 1620212f9959905481376ed8149faffa
+2026-08-28T04:48:49.2285952Z   GITHUB_AW_OTEL_PARENT_SPAN_ID: 7f9609c486e9ec16
+2026-08-28T04:48:49.2286623Z   GITHUB_AW_OTEL_JOB_START_MS: 1787892529199
+2026-08-28T04:48:49.2287206Z   GH_AW_COMMANDS: ["repo-assist"]
+2026-08-28T04:48:49.2287718Z ##[endgroup]
+2026-08-28T04:48:49.3962934Z Checking command position. First word in text: Add
+2026-08-28T04:48:49.3967433Z Looking for commands: /repo-assist
+2026-08-28T04:48:49.4026140Z ##[warning]⚠️ None of the commands [/repo-assist] matched the first word (found: 'Add'). Workflow will be skipped.

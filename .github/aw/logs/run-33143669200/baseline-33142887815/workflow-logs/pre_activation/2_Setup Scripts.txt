@@ -1,0 +1,25 @@
+﻿2026-08-28T04:48:47.2256204Z ##[group]Run github/gh-aw-actions/setup@6aab9e5b5c91c615506061f09bedd81a23babe3c
+2026-08-28T04:48:47.2257425Z with:
+2026-08-28T04:48:47.2257958Z   destination: /home/runner/work/_temp/gh-aw/actions
+2026-08-28T04:48:47.2258759Z   job-name: pre_activation
+2026-08-28T04:48:47.2259301Z   safe-output-artifact-client: false
+2026-08-28T04:48:47.2260054Z env:
+2026-08-28T04:48:47.2260485Z   GH_AW_RUNTIME_FEATURES: 
+2026-08-28T04:48:47.2261040Z   GH_AW_SETUP_WORKFLOW_NAME: Repo Assist
+2026-08-28T04:48:47.2261991Z   GH_AW_CURRENT_WORKFLOW_REF: NeoHylde/doomclone/.github/workflows/repo-assist.lock.yml@refs/pull/1/merge
+2026-08-28T04:48:47.2263898Z   GH_AW_INFO_VERSION: 2.1.227
+2026-08-28T04:48:47.2264743Z   GH_AW_INFO_AWF_VERSION: v0.27.44
+2026-08-28T04:48:47.2265304Z   GH_AW_INFO_BODY_MODIFIED: false
+2026-08-28T04:48:47.2265851Z   GH_AW_INFO_ENGINE_ID: claude
+2026-08-28T04:48:47.2266402Z ##[endgroup]
+2026-08-28T04:48:48.8809670Z Successfully copied 462 files to /home/runner/work/_temp/gh-aw/actions
+2026-08-28T04:48:49.0747592Z Successfully copied 26 mcp-scripts files to /home/runner/work/_temp/gh-aw/mcp-scripts
+2026-08-28T04:48:49.1677192Z Successfully copied 85 safe-outputs files to /home/runner/work/_temp/gh-aw/safeoutputs
+2026-08-28T04:48:49.1948449Z [info] [otlp] INPUT_TRACE_ID not set, a new trace ID will be generated
+2026-08-28T04:48:49.1953137Z [info] [otlp] GH_AW_OTLP_ENDPOINTS not set, skipping setup span
+2026-08-28T04:48:49.1978005Z [info] [otlp] resolved trace-id=1620212f9959905481376ed8149faffa
+2026-08-28T04:48:49.1980950Z [info] [otlp] trace-id=1620212f9959905481376ed8149faffa written to GITHUB_OUTPUT
+2026-08-28T04:48:49.1984180Z [info] [otlp] span-id=7f9609c486e9ec16 written to GITHUB_OUTPUT
+2026-08-28T04:48:49.1986901Z [info] [otlp] GITHUB_AW_OTEL_TRACE_ID written to GITHUB_ENV
+2026-08-28T04:48:49.1988905Z [info] [otlp] GITHUB_AW_OTEL_PARENT_SPAN_ID written to GITHUB_ENV
+2026-08-28T04:48:49.1990868Z [info] [otlp] GITHUB_AW_OTEL_JOB_START_MS written to GITHUB_ENV
