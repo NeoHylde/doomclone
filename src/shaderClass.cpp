@@ -1,4 +1,5 @@
 #include "shaderClass.h"
+#include <cstring>
 
 std::string get_file_contents(const char *filename)
 {
@@ -27,6 +28,7 @@ Shader::Shader(const char *vertexFile, const char *fragmentFile)
     GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertexShader, 1, &vertexSource, NULL);
     glCompileShader(vertexShader);
+    compileErrors(vertexShader, "VERTEX");
 
     GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragmentShader, 1, &fragmentSource, NULL);
@@ -57,24 +59,24 @@ void Shader::compileErrors(unsigned int shader, const char *type)
 {
     GLint hasCompiled;
     char infoLog[1024];
-    if (type != "PROGRAM")
+    if (std::strcmp(type, "PROGRAM") != 0)
     {
         glGetShaderiv(shader, GL_COMPILE_STATUS, &hasCompiled);
         if (hasCompiled == GL_FALSE)
         {
             glGetShaderInfoLog(shader, 1024, NULL, infoLog);
             std::cout << "SHADER_COMPILATION_ERROR for:" << type << "\n"
-                      << std::endl;
+                      << infoLog << std::endl;
         }
     }
     else
     {
-        glGetShaderiv(shader, GL_COMPILE_STATUS, &hasCompiled);
+        glGetProgramiv(shader, GL_LINK_STATUS, &hasCompiled);
         if (hasCompiled == GL_FALSE)
         {
             glGetProgramInfoLog(shader, 1024, NULL, infoLog);
             std::cout << "SHADER_LINKING_ERROR for:" << type << "\n"
-                      << std::endl;
+                      << infoLog << std::endl;
         }
     }
 }
